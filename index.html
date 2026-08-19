@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Tuoi Itinerari</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
+    .login-screen { min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; }
+    .login-box { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 360px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .login-box h2 { text-align: center; margin-bottom: 1.5rem; font-size: 20px; }
+    .login-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 14px; }
+    .login-box button { width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .login-box button:hover { background: #5568d3; }
+    
+    .app-screen { display: none; }
+    .app-screen.show { display: block; }
+    
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .header h1 { font-size: 24px; }
+    .header button { padding: 6px 12px; font-size: 13px; border: 1px solid #ddd; background: transparent; border-radius: 8px; cursor: pointer; }
+    
+    .buttons-row { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
+    .btn-primary { padding: 10px 16px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
+    .btn-primary:hover { background: #5568d3; }
+    .btn-secondary { padding: 10px 16px; background: white; color: #667eea; border: 1px solid #667eea; border-radius: 8px; cursor: pointer; font-weight: 500; }
+    .btn-secondary:hover { background: #f9f9f9; }
+    
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+    .modal.show { display: flex; }
+    .modal-content { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 500px; max-height: 90vh; overflow: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .modal-content h2 { margin-top: 0; margin-bottom: 1.5rem; font-size: 18px; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-size: 14px; color: #666; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .form-group textarea { min-height: 80px; }
+    .modal-buttons { display: flex; gap: 12px; margin-top: 1.5rem; }
+    .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
+    .modal-buttons .btn-save { background: #667eea; color: white; }
+    .modal-buttons .btn-save:hover { background: #5568d3; }
+    .modal-buttons .btn-cancel { background: #f5f5f5; color: #333; }
+    .modal-buttons .btn-cancel:hover { background: #e8e8e8; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; }
+    .card h3 { margin: 0 0 8px 0; font-size: 16px; }
+    .card p { margin: 4px 0; font-size: 13px; color: #666; }
+    .card-section { margin: 12px 0 8px 0; padding: 8px; background: #f9f9f9; border-radius: 8px; font-size: 13px; }
+    .card-section p { margin: 0; color: #333; white-space: pre-wrap; word-break: break-word; }
+    .card-section strong { display: block; margin-bottom: 4px; color: #666; font-weight: 500; }
+    .card-buttons { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid #ddd; }
+    .card-buttons button { flex: 1; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    .card-buttons .btn-edit { color: #667eea; border-color: #667eea; }
+    .card-buttons .btn-delete { color: #e74c3c; border-color: #e74c3c; }
+    .card-buttons button:hover { background: #f9f9f9; }
+    
+    .empty { grid-column: 1/-1; text-align: center; padding: 3rem 2rem; color: #999; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <h2>I Tuoi Itinerari</h2>
+    <input type="password" id="loginPassword" placeholder="Inserisci password" />
+    <button onclick="login()">Accedi</button>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="appScreen" class="app-screen">
+  <div class="container">
+    <div class="header">
+      <h1>I Tuoi Itinerari</h1>
+      <button onclick="logout()">Esci</button>
+    </div>
+    
+    <div class="buttons-row">
+      <button class="btn-primary" onclick="openForm()">+ Nuovo itinerario</button>
+      <button class="btn-secondary" onclick="exportData()">Esporta</button>
+      <label class="btn-secondary" style="cursor: pointer; display: inline-block;">
+        Importa
+        <input type="file" accept=".json" onchange="importData(event)" style="display: none;" />
+      </label>
+    </div>
+    
+    <div id="grid" class="grid">
+      <div class="empty">Nessun itinerario salvato. Crea il tuo primo viaggio!</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FORM -->
+<div id="formModal" class="modal">
+  <div class="modal-content">
+    <h2 id="formTitle">Nuovo itinerario</h2>
+    
+    <div class="form-group">
+      <label>Nome del viaggio *</label>
+      <input type="text" id="inputName" placeholder="es. Gargano agosto 2026" />
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group">
+        <label>Data inizio *</label>
+        <input type="date" id="inputStartDate" />
+      </div>
+      <div class="form-group">
+        <label>Data fine</label>
+        <input type="date" id="inputEndDate" />
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Luogo</label>
+      <input type="text" id="inputLocation" placeholder="es. Peschici, Gargano" />
+    </div>
+    
+    <div class="form-group">
+      <label>Spiagge da visitare</label>
+      <textarea id="inputBeaches" placeholder="es. Procinisco, Sfinale, Zaiana..."></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>Ristoranti e cene</label>
+      <textarea id="inputRestaurants" placeholder="es. Da Nonna Italia, Osteria Al Vicolo..."></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label>Note e dettagli</label>
+      <textarea id="inputNotes" placeholder="Orari traghetti, consigli, etc..."></textarea>
+    </div>
+    
+    <div class="modal-buttons">
+      <button class="btn-save" onclick="saveItinerary()">Salva</button>
+      <button class="btn-cancel" onclick="closeForm()">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PASSWORD = 'gargano2026';
+let itineraries = [];
+let editingId = null;
+
+// Load data
+function loadData() {
+  const saved = localStorage.getItem('travelItineraries');
+  itineraries = saved ? JSON.parse(saved) : [];
+  renderGrid();
+}
+
+// Save data
+function saveData() {
+  localStorage.setItem('travelItineraries', JSON.stringify(itineraries));
+}
+
+// Login
+function login() {
+  const pass = document.getElementById('loginPassword').value;
+  if (pass === PASSWORD) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').classList.add('show');
+    loadData();
+  } else {
+    alert('Password non corretta');
+  }
+}
+
+// Logout
+function logout() {
+  document.getElementById('appScreen').classList.remove('show');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPassword').value = '';
+}
+
+// Form
+function openForm() {
+  editingId = null;
+  document.getElementById('formTitle').textContent = 'Nuovo itinerario';
+  document.getElementById('inputName').value = '';
+  document.getElementById('inputStartDate').value = '';
+  document.getElementById('inputEndDate').value = '';
+  document.getElementById('inputLocation').value = '';
+  document.getElementById('inputBeaches').value = '';
+  document.getElementById('inputRestaurants').value = '';
+  document.getElementById('inputNotes').value = '';
+  document.getElementById('formModal').classList.add('show');
+}
+
+function closeForm() {
+  document.getElementById('formModal').classList.remove('show');
+}
+
+function saveItinerary() {
+  const name = document.getElementById('inputName').value.trim();
+  const startDate = document.getElementById('inputStartDate').value.trim();
+  
+  if (!name || !startDate) {
+    alert('Nome e data di inizio obbligatori');
+    return;
+  }
+  
+  const data = {
+    id: editingId || Date.now(),
+    name,
+    startDate,
+    endDate: document.getElementById('inputEndDate').value,
+    location: document.getElementById('inputLocation').value,
+    beaches: document.getElementById('inputBeaches').value,
+    restaurants: document.getElementById('inputRestaurants').value,
+    notes: document.getElementById('inputNotes').value
+  };
+  
+  if (editingId) {
+    itineraries = itineraries.map(i => i.id === editingId ? data : i);
+  } else {
+    itineraries.push(data);
+  }
+  
+  saveData();
+  renderGrid();
+  closeForm();
+}
+
+// Edit
+function editItinerary(id) {
+  const item = itineraries.find(i => i.id === id);
+  if (!item) return;
+  
+  editingId = id;
+  document.getElementById('formTitle').textContent = 'Modifica itinerario';
+  document.getElementById('inputName').value = item.name;
+  document.getElementById('inputStartDate').value = item.startDate;
+  document.getElementById('inputEndDate').value = item.endDate;
+  document.getElementById('inputLocation').value = item.location;
+  document.getElementById('inputBeaches').value = item.beaches;
+  document.getElementById('inputRestaurants').value = item.restaurants;
+  document.getElementById('inputNotes').value = item.notes;
+  document.getElementById('formModal').classList.add('show');
+}
+
+// Delete
+function deleteItinerary(id) {
+  if (confirm('Elimina questo itinerario?')) {
+    itineraries = itineraries.filter(i => i.id !== id);
+    saveData();
+    renderGrid();
+  }
+}
+
+// Render
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  
+  if (itineraries.length === 0) {
+    grid.innerHTML = '<div class="empty">Nessun itinerario salvato. Crea il tuo primo viaggio!</div>';
+    return;
+  }
+  
+  grid.innerHTML = itineraries.map(item => `
+    <div class="card">
+      <h3>${item.name}</h3>
+      ${item.location ? `<p>📍 ${item.location}</p>` : ''}
+      <p>📅 ${item.startDate}${item.endDate ? ` - ${item.endDate}` : ''}</p>
+      
+      ${item.beaches ? `
+        <div class="card-section">
+          <strong>Spiagge:</strong>
+          <p>${item.beaches}</p>
+        </div>
+      ` : ''}
+      
+      ${item.restaurants ? `
+        <div class="card-section">
+          <strong>Ristoranti:</strong>
+          <p>${item.restaurants}</p>
+        </div>
+      ` : ''}
+      
+      ${item.notes ? `
+        <div class="card-section">
+          <strong>Note:</strong>
+          <p>${item.notes}</p>
+        </div>
+      ` : ''}
+      
+      <div class="card-buttons">
+        <button class="btn-edit" onclick="editItinerary(${item.id})">Modifica</button>
+        <button class="btn-delete" onclick="deleteItinerary(${item.id})">Elimina</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Export
+function exportData() {
+  const data = JSON.stringify(itineraries, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `itineraries_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+}
+
+// Import
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      itineraries = data;
+      saveData();
+      renderGrid();
+      alert('Itinerari importati con successo');
+    } catch {
+      alert('Errore nel file JSON');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Init
+loadData();
+</script>
+
+</body>
+</html>
