@@ -1,335 +1,948 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>I Tuoi Itinerari</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
-    .container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
-    .login-screen { min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; }
-    .login-box { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 360px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-    .login-box h2 { text-align: center; margin-bottom: 1.5rem; font-size: 20px; }
-    .login-box input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; font-size: 14px; }
-    .login-box button { width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
-    .login-box button:hover { background: #5568d3; }
-    
-    .app-screen { display: none; }
-    .app-screen.show { display: block; }
-    
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .header h1 { font-size: 24px; }
-    .header button { padding: 6px 12px; font-size: 13px; border: 1px solid #ddd; background: transparent; border-radius: 8px; cursor: pointer; }
-    
-    .buttons-row { display: flex; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; }
-    .btn-primary { padding: 10px 16px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
-    .btn-primary:hover { background: #5568d3; }
-    .btn-secondary { padding: 10px 16px; background: white; color: #667eea; border: 1px solid #667eea; border-radius: 8px; cursor: pointer; font-weight: 500; }
-    .btn-secondary:hover { background: #f9f9f9; }
-    
-    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
-    .modal.show { display: flex; }
-    .modal-content { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 500px; max-height: 90vh; overflow: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-    .modal-content h2 { margin-top: 0; margin-bottom: 1.5rem; font-size: 18px; }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; margin-bottom: 0.5rem; font-size: 14px; color: #666; }
-    .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; }
-    .form-group textarea { min-height: 80px; }
-    .modal-buttons { display: flex; gap: 12px; margin-top: 1.5rem; }
-    .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; }
-    .modal-buttons .btn-save { background: #667eea; color: white; }
-    .modal-buttons .btn-save:hover { background: #5568d3; }
-    .modal-buttons .btn-cancel { background: #f5f5f5; color: #333; }
-    .modal-buttons .btn-cancel:hover { background: #e8e8e8; }
-    
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; }
-    .card h3 { margin: 0 0 8px 0; font-size: 16px; }
-    .card p { margin: 4px 0; font-size: 13px; color: #666; }
-    .card-section { margin: 12px 0 8px 0; padding: 8px; background: #f9f9f9; border-radius: 8px; font-size: 13px; }
-    .card-section p { margin: 0; color: #333; white-space: pre-wrap; word-break: break-word; }
-    .card-section strong { display: block; margin-bottom: 4px; color: #666; font-weight: 500; }
-    .card-buttons { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid #ddd; }
-    .card-buttons button { flex: 1; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 13px; }
-    .card-buttons .btn-edit { color: #667eea; border-color: #667eea; }
-    .card-buttons .btn-delete { color: #e74c3c; border-color: #e74c3c; }
-    .card-buttons button:hover { background: #f9f9f9; }
-    
-    .empty { grid-column: 1/-1; text-align: center; padding: 3rem 2rem; color: #999; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --sand:#F5F0E8;
+  --green:#2E7D5E;
+  --green-dark:#22624A;
+  --green-light:#EAF5F0;
+  --green-text:#1E5540;
+  --coral:#C0532F;
+  --coral-light:#FBEEE8;
+  --amber:#A8761F;
+  --amber-light:#FBF3E2;
+  --text:#1A1A1A;
+  --muted:#6B6B6B;
+  --border:#DDD8CE;
+  --r:10px;
+  --r-lg:14px;
+}
+
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--sand);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+#login{min-height:100vh;background:linear-gradient(160deg,#22624A 0%,#2E7D5E 55%,#3F9B76 100%);display:flex;align-items:center;justify-content:center;padding:1rem}
+.login-card{background:#fff;border-radius:18px;padding:2.5rem 2rem;width:100%;max-width:350px;text-align:center}
+.login-card .plane{font-size:42px;margin-bottom:.75rem}
+.login-card h1{font-size:21px;font-weight:600;margin-bottom:.3rem}
+.login-card p{font-size:13px;color:var(--muted);margin-bottom:1.5rem}
+.login-card input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:15px;font-family:inherit;outline:none;margin-bottom:1rem;transition:border-color .2s}
+.login-card input:focus{border-color:var(--green)}
+.login-card button{width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s}
+.login-card button:hover{background:var(--green-dark)}
+.err{display:none;color:var(--coral);font-size:13px;margin-top:-.5rem;margin-bottom:.75rem}
+
+#app{display:none}
+#app.on{display:block}
+
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:9px}
+.brand span{font-size:21px}
+.brand strong{font-size:16px;font-weight:600}
+.topbar-actions{display:flex;gap:8px}
+
+.btn{padding:8px 14px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green-dark)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--sand)}
+.btn-xs{padding:5px 10px;font-size:11px;border-radius:8px}
+
+.wx-strip{background:#fff;border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:62px}
+.wx-now{display:flex;align-items:center;gap:9px}
+.wx-now .ico{font-size:28px;line-height:1}
+.wx-temp{font-size:22px;font-weight:600;line-height:1}
+.wx-place{font-size:11px;color:var(--muted);margin-top:2px}
+.wx-div{width:1px;height:36px;background:var(--border)}
+.wx-days{display:flex;gap:14px}
+.wx-day{text-align:center;min-width:36px}
+.wx-day .d{font-size:11px;color:var(--muted)}
+.wx-day .i{font-size:16px;line-height:1.3}
+.wx-day .t{font-size:12px;font-weight:500}
+.wx-loading{font-size:12px;color:var(--muted)}
+
+.tabs{background:#fff;display:flex;gap:2px;padding:10px 20px 0;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:54px;z-index:40}
+.tabs::-webkit-scrollbar{height:0}
+.tab{padding:8px 14px;border-radius:8px 8px 0 0;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:var(--green);background:var(--green-light);border-bottom-color:var(--green)}
+.tab:hover:not(.active){background:var(--sand);color:var(--text)}
+
+.wrap{padding:16px 20px 60px;max-width:900px;margin:0 auto}
+
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
+.sec-head h2{font-size:17px;font-weight:600}
+
+.day{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:12px}
+.day-head{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:background .15s}
+.day-head:hover{background:#FAFAF7}
+.day.open .day-head{background:var(--green-light);border-bottom:1px solid var(--border)}
+.day-left{display:flex;align-items:center;gap:11px;min-width:0}
+.day-num{width:32px;height:32px;background:var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#5F5E5A;flex-shrink:0}
+.day.open .day-num{background:var(--green);color:#fff}
+.day-title{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day.open .day-title{color:var(--green-text)}
+.day-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.day.open .day-meta{color:var(--green)}
+.day-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.chev{color:var(--muted);font-size:11px;transition:transform .2s;display:inline-block}
+.day.open .chev{transform:rotate(180deg);color:var(--green)}
+.day-body{display:none}
+.day.open .day-body{display:block}
+
+.act{padding:12px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
+.act:last-child{border-bottom:none}
+.act-time{font-size:11px;color:var(--muted);min-width:50px;font-weight:500;padding-top:2px;flex-shrink:0}
+.act-ico{font-size:20px;line-height:1.2;flex-shrink:0}
+.act-main{flex:1;min-width:0}
+.act-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.act-note{font-size:11px;color:var(--muted);line-height:1.45}
+.act-cost{display:inline-block;margin-top:5px;font-size:11px;font-weight:500;background:var(--amber-light);color:var(--amber);padding:2px 7px;border-radius:20px}
+.act-btns{display:flex;gap:5px;flex-shrink:0;align-items:center}
+.maps-pill{padding:6px 10px;background:var(--green-light);color:var(--green-text);border-radius:7px;font-size:11px;font-weight:500;text-decoration:none;white-space:nowrap;transition:all .15s;display:inline-block}
+.maps-pill:hover{background:var(--green);color:#fff}
+.icobtn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.icobtn:hover{background:var(--sand)}
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.metric{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.metric .lbl{font-size:11px;color:var(--muted);margin-bottom:4px}
+.metric .val{font-size:21px;font-weight:600;line-height:1.1}
+.metric .val.g{color:var(--green)}
+.metric .val.c{color:var(--coral)}
+
+.settle{background:var(--green-light);border:1px solid #9FD1BC;border-radius:var(--r);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.settle .ico{font-size:26px}
+.settle .lbl{font-size:12px;color:var(--green);margin-bottom:2px}
+.settle .txt{font-size:15px;font-weight:600;color:var(--green-text)}
+
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.panel-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel-head h3{font-size:13px;font-weight:600}
+.row{padding:11px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:none}
+.row-ico{font-size:18px;flex-shrink:0}
+.row-main{flex:1;min-width:0}
+.row-name{font-size:13px;font-weight:500}
+.row-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.row-val{font-size:14px;font-weight:600;flex-shrink:0}
+
+.place-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.place{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;display:flex;flex-direction:column}
+.place-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.place-ico{font-size:24px;flex-shrink:0;line-height:1.1}
+.place-tt{flex:1;min-width:0}
+.place-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.place-sub{font-size:11px;color:var(--muted)}
+.place-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;flex:1}
+.tagpill{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500;background:var(--green-light);color:var(--green-text);margin-bottom:10px;align-self:flex-start}
+.maps-full{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--green);color:#fff;border-radius:var(--r);font-size:12px;font-weight:500;text-decoration:none;transition:background .2s}
+.maps-full:hover{background:var(--green-dark)}
+
+.contact-row{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.contact-row:last-child{border-bottom:none}
+.tel-btn{padding:7px 13px;background:var(--green-light);color:var(--green-text);border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;transition:all .15s}
+.tel-btn:hover{background:var(--green);color:#fff}
+.tel-btn.sos{background:var(--coral-light);color:var(--coral)}
+.tel-btn.sos:hover{background:var(--coral);color:#fff}
+
+.notes-area{width:100%;min-height:260px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--r-lg);font-size:13px;font-family:inherit;line-height:1.7;resize:vertical;outline:none;background:#fff;transition:border-color .2s}
+.notes-area:focus{border-color:var(--green)}
+.save-hint{font-size:11px;color:var(--muted);margin-top:8px;text-align:right}
+
+.wx-hero{background:var(--green-light);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;display:flex;align-items:center;gap:18px;margin-bottom:12px;flex-wrap:wrap}
+.wx-hero .big{font-size:48px;line-height:1}
+.wx-hero .deg{font-size:34px;font-weight:600;color:var(--green-text);line-height:1}
+.wx-hero .cond{font-size:13px;color:var(--green);margin-top:5px}
+.wx-hero .det{font-size:11px;color:var(--green);margin-top:3px}
+.wx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.wx-cell{background:var(--sand);border-radius:9px;padding:11px 6px;text-align:center}
+.wx-cell .d{font-size:11px;color:var(--muted);margin-bottom:4px}
+.wx-cell .i{font-size:21px;margin-bottom:4px}
+.wx-cell .mx{font-size:13px;font-weight:600}
+.wx-cell .mn{font-size:10px;color:var(--muted)}
+.wx-hours{display:flex;justify-content:space-between;gap:4px;overflow-x:auto}
+.wx-hour{text-align:center;min-width:44px}
+.wx-hour .h{font-size:10px;color:var(--muted)}
+.wx-hour .i{font-size:16px;line-height:1.4}
+.wx-hour .t{font-size:12px;font-weight:500}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.overlay.on{display:flex}
+.modal{background:#fff;border-radius:var(--r-lg);padding:1.6rem;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:1.2rem}
+.fg{margin-bottom:.9rem}
+.fg label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:inherit;outline:none;background:#fff;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--green)}
+.fg textarea{min-height:72px;resize:vertical}
+.hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mfoot{display:flex;gap:10px;margin-top:1.3rem}
+.mfoot button{flex:1;padding:11px;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;border:none}
+.b-save{background:var(--green);color:#fff}
+.b-save:hover{background:var(--green-dark)}
+.b-cancel{background:var(--sand);color:var(--text)}
+.b-cancel:hover{background:var(--border)}
+.field-err{color:var(--coral);font-size:12px;margin-top:5px;display:none}
+
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--muted)}
+.empty .e{font-size:34px;margin-bottom:.5rem}
+.empty p{font-size:13px}
+
+@media(max-width:640px){
+  .topbar{padding:0 14px}
+  .wx-strip{padding:10px 14px;gap:12px}
+  .tabs{padding:10px 14px 0}
+  .wrap{padding:14px}
+  .frow{grid-template-columns:1fr}
+  .place-grid{grid-template-columns:1fr}
+  .act{flex-wrap:wrap}
+  .act-btns{width:100%;justify-content:flex-end;margin-top:6px}
+}
+</style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" class="login-screen">
-  <div class="login-box">
-    <h2>I Tuoi Itinerari</h2>
-    <input type="password" id="loginPassword" placeholder="Inserisci password" />
-    <button onclick="login()">Accedi</button>
+<div id="login">
+  <div class="login-card">
+    <div class="plane">&#9992;&#65039;</div>
+    <h1>Travel Board</h1>
+    <p>Accedi per vedere i tuoi viaggi</p>
+    <input type="password" id="pwd" placeholder="Password" autocomplete="current-password">
+    <div class="err" id="err">Password non corretta</div>
+    <button onclick="doLogin()">Accedi</button>
   </div>
 </div>
 
-<!-- APP SCREEN -->
-<div id="appScreen" class="app-screen">
-  <div class="container">
-    <div class="header">
-      <h1>I Tuoi Itinerari</h1>
-      <button onclick="logout()">Esci</button>
+<div id="app">
+  <div class="topbar">
+    <div class="brand"><span>&#9992;&#65039;</span><strong>Travel Board</strong></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="exportData()">Backup</button>
+      <button class="btn btn-ghost" onclick="doLogout()">Esci</button>
     </div>
-    
-    <div class="buttons-row">
-      <button class="btn-primary" onclick="openForm()">+ Nuovo itinerario</button>
-      <button class="btn-secondary" onclick="exportData()">Esporta</button>
-      <label class="btn-secondary" style="cursor: pointer; display: inline-block;">
-        Importa
-        <input type="file" accept=".json" onchange="importData(event)" style="display: none;" />
-      </label>
+  </div>
+
+  <div class="wx-strip" id="wxStrip"><span class="wx-loading">Caricamento meteo...</span></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="go('itin',this)">&#128197; Itinerario</button>
+    <button class="tab" onclick="go('meteo',this)">&#127780;&#65039; Meteo</button>
+    <button class="tab" onclick="go('budget',this)">&#128176; Budget</button>
+    <button class="tab" onclick="go('vedere',this)">&#128064; Da vedere</button>
+    <button class="tab" onclick="go('contatti',this)">&#128222; Contatti</button>
+    <button class="tab" onclick="go('note',this)">&#128221; Note</button>
+  </div>
+
+  <div class="wrap">
+    <div id="v-itin"></div>
+    <div id="v-meteo" style="display:none"></div>
+    <div id="v-budget" style="display:none"></div>
+    <div id="v-vedere" style="display:none"></div>
+    <div id="v-contatti" style="display:none"></div>
+    <div id="v-note" style="display:none"></div>
+  </div>
+</div>
+
+<div class="overlay" id="mAct">
+  <div class="modal">
+    <h3 id="mActTitle">Aggiungi attivita</h3>
+    <div class="frow">
+      <div class="fg"><label>Orario</label><input type="text" id="aTime" placeholder="09:00"></div>
+      <div class="fg"><label>Icona</label><input type="text" id="aIco" placeholder="emoji"></div>
     </div>
-    
-    <div id="grid" class="grid">
-      <div class="empty">Nessun itinerario salvato. Crea il tuo primo viaggio!</div>
+    <div class="fg">
+      <label>Nome</label>
+      <input type="text" id="aName" placeholder="Spiaggia di Procinisco" oninput="clearErr('aNameErr')">
+      <div class="field-err" id="aNameErr">Inserisci un nome</div>
+    </div>
+    <div class="fg"><label>Nota</label><textarea id="aNote" placeholder="Prenotare, portare contanti, dettagli utili"></textarea></div>
+    <div class="fg"><label>Costo stimato</label><input type="text" id="aCost" placeholder="25 euro"></div>
+    <div class="fg">
+      <label>Link Google Maps</label>
+      <input type="url" id="aMaps" placeholder="https://maps.google.com/...">
+      <div class="hint">Su Google Maps: cerca il posto, poi Condividi e Copia link</div>
+    </div>
+    <div class="mfoot">
+      <button class="b-save" onclick="saveAct()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mAct')">Annulla</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL FORM -->
-<div id="formModal" class="modal">
-  <div class="modal-content">
-    <h2 id="formTitle">Nuovo itinerario</h2>
-    
-    <div class="form-group">
-      <label>Nome del viaggio *</label>
-      <input type="text" id="inputName" placeholder="es. Gargano agosto 2026" />
+<div class="overlay" id="mDay">
+  <div class="modal">
+    <h3 id="mDayTitle">Aggiungi giorno</h3>
+    <div class="fg">
+      <label>Titolo del giorno</label>
+      <input type="text" id="dTitle" placeholder="Giovedi 28 Agosto" oninput="clearErr('dTitleErr')">
+      <div class="field-err" id="dTitleErr">Inserisci un titolo</div>
     </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-      <div class="form-group">
-        <label>Data inizio *</label>
-        <input type="date" id="inputStartDate" />
+    <div class="mfoot">
+      <button class="b-save" onclick="saveDay()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mDay')">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="mExp">
+  <div class="modal">
+    <h3 id="mExpTitle">Aggiungi spesa</h3>
+    <div class="frow">
+      <div class="fg"><label>Icona</label><input type="text" id="eIco" placeholder="emoji"></div>
+      <div class="fg"><label>Data</label><input type="text" id="eDate" placeholder="29 Ago"></div>
+    </div>
+    <div class="fg">
+      <label>Descrizione</label>
+      <input type="text" id="eName" placeholder="Cena Da Nonna Italia" oninput="clearErr('eNameErr')">
+      <div class="field-err" id="eNameErr">Inserisci una descrizione</div>
+    </div>
+    <div class="frow">
+      <div class="fg">
+        <label>Importo in euro</label>
+        <input type="number" id="eAmt" placeholder="72" step="0.01" oninput="clearErr('eAmtErr')">
+        <div class="field-err" id="eAmtErr">Inserisci un importo</div>
       </div>
-      <div class="form-group">
-        <label>Data fine</label>
-        <input type="date" id="inputEndDate" />
-      </div>
+      <div class="fg"><label>Ha pagato</label><select id="eWho"><option value="Emiliano">Emiliano</option><option value="Daniela">Daniela</option></select></div>
     </div>
-    
-    <div class="form-group">
-      <label>Luogo</label>
-      <input type="text" id="inputLocation" placeholder="es. Peschici, Gargano" />
+    <div class="mfoot">
+      <button class="b-save" onclick="saveExp()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mExp')">Annulla</button>
     </div>
-    
-    <div class="form-group">
-      <label>Spiagge da visitare</label>
-      <textarea id="inputBeaches" placeholder="es. Procinisco, Sfinale, Zaiana..."></textarea>
+  </div>
+</div>
+
+<div class="overlay" id="mPlace">
+  <div class="modal">
+    <h3 id="mPlaceTitle">Aggiungi posto</h3>
+    <div class="frow">
+      <div class="fg"><label>Icona</label><input type="text" id="pIco" placeholder="emoji"></div>
+      <div class="fg"><label>Tag</label><input type="text" id="pTag" placeholder="Must"></div>
     </div>
-    
-    <div class="form-group">
-      <label>Ristoranti e cene</label>
-      <textarea id="inputRestaurants" placeholder="es. Da Nonna Italia, Osteria Al Vicolo..."></textarea>
+    <div class="fg">
+      <label>Nome</label>
+      <input type="text" id="pName" placeholder="Pizzomunno" oninput="clearErr('pNameErr')">
+      <div class="field-err" id="pNameErr">Inserisci un nome</div>
     </div>
-    
-    <div class="form-group">
-      <label>Note e dettagli</label>
-      <textarea id="inputNotes" placeholder="Orari traghetti, consigli, etc..."></textarea>
+    <div class="fg"><label>Sottotitolo</label><input type="text" id="pSub" placeholder="Vieste, 45 min"></div>
+    <div class="fg"><label>Descrizione</label><textarea id="pDesc" placeholder="Perche vale la pena andarci"></textarea></div>
+    <div class="fg"><label>Link Google Maps</label><input type="url" id="pMaps" placeholder="https://maps.google.com/..."></div>
+    <div class="mfoot">
+      <button class="b-save" onclick="savePlace()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mPlace')">Annulla</button>
     </div>
-    
-    <div class="modal-buttons">
-      <button class="btn-save" onclick="saveItinerary()">Salva</button>
-      <button class="btn-cancel" onclick="closeForm()">Annulla</button>
+  </div>
+</div>
+
+<div class="overlay" id="mCon">
+  <div class="modal">
+    <h3 id="mConTitle">Aggiungi contatto</h3>
+    <div class="frow">
+      <div class="fg"><label>Icona</label><input type="text" id="cIco" placeholder="emoji"></div>
+      <div class="fg"><label>Tipo</label><select id="cType"><option value="normale">Utile</option><option value="sos">Emergenza</option></select></div>
+    </div>
+    <div class="fg">
+      <label>Nome</label>
+      <input type="text" id="cName" placeholder="Da Nonna Italia" oninput="clearErr('cNameErr')">
+      <div class="field-err" id="cNameErr">Inserisci un nome</div>
+    </div>
+    <div class="fg"><label>Descrizione</label><input type="text" id="cSub" placeholder="Ristorante Peschici"></div>
+    <div class="fg">
+      <label>Numero</label>
+      <input type="tel" id="cTel" placeholder="+39 334 984 7725" oninput="clearErr('cTelErr')">
+      <div class="field-err" id="cTelErr">Inserisci un numero</div>
+    </div>
+    <div class="mfoot">
+      <button class="b-save" onclick="saveCon()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mCon')">Annulla</button>
     </div>
   </div>
 </div>
 
 <script>
-const PASSWORD = 'gargano2026';
-let itineraries = [];
-let editingId = null;
+var PASSWORD='gargano2026';
+var LAT=41.9487, LON=16.0131, PLACE='Peschici';
 
-// Load data
-function loadData() {
-  const saved = localStorage.getItem('travelItineraries');
-  itineraries = saved ? JSON.parse(saved) : [];
-  renderGrid();
+var seed={
+  days:[
+    {id:1,title:'Giovedi 28 Agosto - Arrivo',open:true,acts:[
+      {id:101,time:'Mattina',ico:'\uD83D\uDE97',name:'Partenza da Roma',note:'Circa 5h di viaggio. A1 poi A16 poi SS693. Controlla il NOCO booster nel bagagliaio.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Roma/Peschici'},
+      {id:102,time:'Pomeriggio',ico:'\uD83C\uDFE1',name:'Check-in Residence Jolly',note:'Localita Paglianza, Peschici. Parcheggio incluso. Chiedi la password del wifi.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
+      {id:103,time:'20:00',ico:'\uD83C\uDFD8\uFE0F',name:'Prima passeggiata a Peschici',note:'Centro storico bianco sulla scogliera. Cena leggera, gelato, ricognizione della zona.',cost:'35 euro circa',maps:'https://www.google.com/maps/search/Peschici+centro+storico'}
+    ]},
+    {id:2,title:'Venerdi 29 Agosto - Spiagge vicine',open:false,acts:[
+      {id:201,time:'09:00',ico:'\uD83C\uDFD6\uFE0F',name:'Spiaggia di Procinisco',note:'Piccola e tranquilla. Strada di accesso ripida ma gestibile. Spiaggia libera sul retro.',cost:'25 euro lettini e parking',maps:'https://maps.google.com/?cid=1561469096568184047'},
+      {id:202,time:'13:00',ico:'\uD83C\uDF7D\uFE0F',name:'Pranzo al ristorante della spiaggia',note:'Pesce fresco a prezzi onesti, molto apprezzato dai recensori.',cost:'45 euro',maps:'https://maps.google.com/?cid=1561469096568184047'},
+      {id:203,time:'17:00',ico:'\uD83C\uDF0A',name:'Baia di Peschici',note:'Spiaggia principale, lunga passeggiata sul bagnasciuga fino alle calette.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
+      {id:204,time:'20:00',ico:'\u2B50',name:'Cena Da Nonna Italia',note:'PRENOTARE. Vista tramonto eccezionale, pasta fatta in casa, vongole con bottarga.',cost:'70 euro',maps:'https://maps.google.com/?cid=3544764396454536334'}
+    ]},
+    {id:3,title:'Sabato 30 Agosto - Est e Rodi',open:false,acts:[
+      {id:301,time:'09:00',ico:'\uD83C\uDFD6\uFE0F',name:'Zaiana Beach',note:'Ampia e attrezzata, acque bellissime. Trabucco storico nelle vicinanze.',cost:'25 euro',maps:'https://maps.google.com/?cid=2629661639351755331'},
+      {id:302,time:'16:00',ico:'\uD83C\uDF32',name:'Sfinale Beach',note:'La piu vicina al residence, circa 8 minuti. Sabbia fine, pineta, torre saracena.',cost:'20 euro',maps:'https://maps.google.com/?cid=9565958954535631846'},
+      {id:303,time:'19:30',ico:'\uD83C\uDF05',name:'Rodi Garganico al tramonto',note:'25 minuti di auto. Lungomare panoramico, aperitivo con vista sul mare.',cost:'20 euro',maps:'https://www.google.com/maps/search/Rodi+Garganico+lungomare'},
+      {id:304,time:'21:00',ico:'\uD83C\uDF5D',name:'Cena Trattoria Pane e Pomodoro',note:'Orecchiette pistacchio e gamberi. Porzioni generose, vista mare.',cost:'60 euro',maps:'https://maps.google.com/?cid=14813282956050820855'}
+    ]},
+    {id:4,title:'Domenica 31 Agosto - Relax',open:false,acts:[
+      {id:401,time:'10:00',ico:'\uD83E\uDD3F',name:'Spiaggia di Calalunga',note:'Baia chiusa con scogliere, acqua profonda e trasparente. Ideale per nuotare.',cost:'25 euro',maps:'https://maps.google.com/?cid=10329733903097553584'},
+      {id:402,time:'18:00',ico:'\uD83D\uDED2',name:'Spesa e preparativi',note:'Prepara lo zaino per le Tremiti: acqua, creme, snack, costume di ricambio, powerbank.',cost:'30 euro',maps:''},
+      {id:403,time:'20:30',ico:'\uD83D\uDC1F',name:'Cena I Tre Archi',note:'Centro storico di Peschici. Fritto misto delicato, semifreddo Ferrero Rocher.',cost:'65 euro',maps:'https://www.google.com/maps/search/I+Tre+Archi+Peschici'}
+    ]},
+    {id:5,title:'Lunedi 1 Settembre - Isole Tremiti',open:false,acts:[
+      {id:501,time:'06:45',ico:'\u23F0',name:'Sveglia e colazione veloce',note:'Zaino pronto dalla sera prima. Controlla il biglietto sul telefono.',cost:'',maps:''},
+      {id:502,time:'07:15',ico:'\uD83D\uDE97',name:'Auto verso il Porto di Peschici',note:'10 minuti dal residence. Parcheggio nei pressi del porto, a pagamento.',cost:'10 euro parking',maps:'https://maps.google.com/?cid=6843945624796536268'},
+      {id:503,time:'07:30',ico:'\uD83D\uDEA2',name:'Traghetto Navitremiti',note:'Biglietti su navitremiti.com, prenotare online in anticipo. Traversata circa 1 ora.',cost:'90 euro in due',maps:'https://maps.google.com/?cid=6843945624796536268'},
+      {id:504,time:'09:00',ico:'\uD83C\uDFDD\uFE0F',name:'Arrivo a San Domino',note:'Contatta Mare e Stelle al 371 489 1806 per il tour privato in barca.',cost:'',maps:'https://www.google.com/maps/search/Isole+Tremiti+San+Domino'},
+      {id:505,time:'09:30',ico:'\u26F5',name:'Tour in barca con Mare e Stelle',note:'4-5 ore. Grotta dei Pagliai, statua sommersa di Padre Pio, soste per nuotare, ricci freschi.',cost:'130 euro in due',maps:'https://www.google.com/maps/search/Isole+Tremiti'},
+      {id:506,time:'17:00',ico:'\uD83D\uDEA2',name:'Traghetto di rientro',note:'Rientro a Peschici verso le 18. Cena leggera al residence, giornata intensa.',cost:'',maps:'https://maps.google.com/?cid=6843945624796536268'}
+    ]},
+    {id:6,title:'Martedi 2 Settembre - Vieste',open:false,acts:[
+      {id:601,time:'09:30',ico:'\uD83C\uDFD6\uFE0F',name:'Mattina in spiaggia',note:'Scegli in base al meteo. Sfinale per comodita, Calalunga per nuotare.',cost:'25 euro',maps:'https://maps.google.com/?cid=9565958954535631846'},
+      {id:602,time:'16:00',ico:'\uD83D\uDE97',name:'Partenza per Vieste',note:'45 minuti di auto lungo la costa. Panorami bellissimi, fermati per le foto.',cost:'',maps:'https://www.google.com/maps/search/Vieste+centro+storico'},
+      {id:603,time:'17:30',ico:'\uD83C\uDFF0',name:'Centro storico di Vieste',note:'Pizzomunno, vicoli bianchi, belvedere. Aperitivo con vista sul mare.',cost:'25 euro',maps:'https://www.google.com/maps/search/Vieste+Pizzomunno'},
+      {id:604,time:'20:00',ico:'\u2764\uFE0F',name:'Cena Osteria Al Vicolo dell Amore',note:'PRENOTARE, e piccola. Sotto le scale con i cuori dipinti. Cucina eccellente.',cost:'75 euro',maps:'https://maps.google.com/?cid=14313543614219014030'}
+    ]},
+    {id:7,title:'Mercoledi 3 Settembre - Rientro',open:false,acts:[
+      {id:701,time:'09:00',ico:'\uD83C\uDF0A',name:'Ultima nuotata',note:'La tua spiaggia preferita della settimana. Goditela senza fretta.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
+      {id:702,time:'11:30',ico:'\uD83E\uDDF3',name:'Check-out dal Residence Jolly',note:'Bagagli in auto, ultimo caffe nel centro storico di Peschici.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
+      {id:703,time:'13:00',ico:'\uD83D\uDE97',name:'Partenza verso Roma',note:'Circa 5 ore. Pausa consigliata dopo 2 ore di guida. Buon rientro.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Peschici/Roma'}
+    ]}
+  ],
+  expenses:[
+    {id:1001,ico:'\uD83C\uDFE1',name:'Residence Jolly, 6 notti',date:'28 Ago',amt:480,who:'Emiliano'},
+    {id:1002,ico:'\u26FD',name:'Benzina andata',date:'28 Ago',amt:85,who:'Emiliano'}
+  ],
+  places:[
+    {id:2001,ico:'\uD83D\uDDFF',name:'Pizzomunno',sub:'Vieste, 45 min',tag:'Iconico',desc:'Monolite bianco di 25 metri sulla spiaggia di Vieste, legato a una leggenda locale. Meglio all alba o al tramonto, quando la luce lo accende e non c e folla.',maps:'https://www.google.com/maps/search/Pizzomunno+Vieste'},
+    {id:2002,ico:'\uD83C\uDFA3',name:'Trabucco da Mimi',sub:'Peschici, 10 min',tag:'Autentico',desc:'Antica macchina da pesca in legno a picco sul mare, ancora funzionante. Struttura protetta e visitabile. Al tramonto la vista e memorabile.',maps:'https://www.google.com/maps/search/Trabucco+da+Mimi+Peschici'},
+    {id:2003,ico:'\u26EA',name:'Santuario di San Michele',sub:'Monte Sant Angelo, 1h',tag:'UNESCO',desc:'Basilica scavata nella roccia, patrimonio UNESCO, meta di pellegrinaggio da 1500 anni. La grotta e impressionante. Abbinabile al castello normanno.',maps:'https://maps.google.com/?cid=2695649454165254931'},
+    {id:2004,ico:'\uD83C\uDF32',name:'Foresta Umbra',sub:'Centro Gargano, 40 min',tag:'Natura',desc:'Faggeta secolare patrimonio UNESCO, temperature fresche anche ad agosto. Sentieri facili e ben segnalati. Ottima alternativa se il meteo peggiora.',maps:'https://www.google.com/maps/search/Foresta+Umbra+Gargano'},
+    {id:2005,ico:'\uD83D\uDD73\uFE0F',name:'Grotte marine di Vieste',sub:'In barca dal porto',tag:'Da mare',desc:'Costa scavata da decine di grotte: dei Contrabbandieri, dei Due Occhi, Campana. Si vedono solo dal mare, con i gozzi che partono dal porto di Vieste.',maps:'https://www.google.com/maps/search/Grotte+marine+Vieste'},
+    {id:2006,ico:'\uD83C\uDFDB\uFE0F',name:'Abbazia Santa Maria a Mare',sub:'Isole Tremiti, San Nicola',tag:'Storia',desc:'Complesso monastico fortificato dell XI secolo su San Nicola. Mosaico pavimentale e vista sull arcipelago. Vale il salto se il tour in barca lo permette.',maps:'https://www.google.com/maps/search/Abbazia+Santa+Maria+a+Mare+Tremiti'}
+  ],
+  contacts:[
+    {id:3001,ico:'\uD83C\uDD98',name:'Numero unico emergenze',sub:'Valido in tutta Europa',tel:'112',type:'sos'},
+    {id:3002,ico:'\uD83C\uDFE5',name:'Ospedale San Timoteo',sub:'Termoli, pronto soccorso',tel:'0875 7181',type:'sos'},
+    {id:3003,ico:'\uD83D\uDC8A',name:'Farmacia Peschici',sub:'Centro, turni notturni affissi',tel:'0884 964037',type:'normale'},
+    {id:3004,ico:'\uD83D\uDE97',name:'Soccorso stradale ACI',sub:'Assistenza auto 24h',tel:'803116',type:'sos'},
+    {id:3005,ico:'\u2B50',name:'Da Nonna Italia',sub:'Ristorante Peschici',tel:'334 984 7725',type:'normale'},
+    {id:3006,ico:'\u2764\uFE0F',name:'Osteria Al Vicolo dell Amore',sub:'Ristorante Vieste',tel:'350 567 6232',type:'normale'},
+    {id:3007,ico:'\uD83C\uDF5D',name:'Trattoria Pane e Pomodoro',sub:'Ristorante Rodi Garganico',tel:'324 929 0321',type:'normale'},
+    {id:3008,ico:'\u26F5',name:'Mare e Stelle',sub:'Tour in barca Tremiti',tel:'371 489 1806',type:'normale'},
+    {id:3009,ico:'\uD83D\uDEA2',name:'Navitremiti',sub:'Traghetti Peschici Tremiti',tel:'0884 962732',type:'normale'}
+  ],
+  notes:'INFO VIAGGIO\n\nPercorso Roma - Peschici: circa 430 km, 4h30-5h.\nA1 Roma-Napoli, poi A16 Napoli-Canosa, poi A14 verso Foggia, uscita Poggio Imperiale, SS693 costiera.\nPedaggi stimati: 28-32 euro a tratta.\nBenzina stimata: 80-90 euro a tratta.\n\nDA NON DIMENTICARE\n\n- NOCO G3500 booster nel bagagliaio (batteria 12V da tenere d occhio)\n- Creme solari alta protezione, il sole del Gargano picchia\n- Scarpe da scoglio per Calalunga\n- Powerbank per la giornata alle Tremiti\n- Contanti: molti lidi e parcheggi non accettano carte\n- Documenti e tessera sanitaria\n\nNOTE PRATICHE\n\nParcheggi spiagge: 4-5 euro al giorno.\nLettini e ombrellone: 20-25 euro.\nRistoranti: prenotare sempre, ad agosto si riempie tutto.\nStrade per le calette: strette e ripide, guida con calma.\n\nWIFI RESIDENCE:\n\n\nALTRO:\n'
+};
+
+var data=null, activeDay=null, editAct=null, editDay=null, editExp=null, editPlaceId=null, editCon=null, wx=null;
+
+function load(){
+  var s=localStorage.getItem('travelBoard');
+  data = s ? JSON.parse(s) : JSON.parse(JSON.stringify(seed));
 }
+function save(){ localStorage.setItem('travelBoard', JSON.stringify(data)); }
 
-// Save data
-function saveData() {
-  localStorage.setItem('travelItineraries', JSON.stringify(itineraries));
-}
-
-// Login
-function login() {
-  const pass = document.getElementById('loginPassword').value;
-  if (pass === PASSWORD) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appScreen').classList.add('show');
-    loadData();
+function doLogin(){
+  if(document.getElementById('pwd').value===PASSWORD){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').classList.add('on');
+    load(); renderAll(); fetchWx();
   } else {
-    alert('Password non corretta');
+    document.getElementById('err').style.display='block';
+    document.getElementById('pwd').value='';
+  }
+}
+function doLogout(){
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login').style.display='flex';
+  document.getElementById('pwd').value='';
+  document.getElementById('err').style.display='none';
+}
+
+function go(t,el){
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  el.classList.add('active');
+  var keys=['itin','meteo','budget','vedere','contatti','note'];
+  for(var j=0;j<keys.length;j++){
+    document.getElementById('v-'+keys[j]).style.display = keys[j]===t ? 'block' : 'none';
   }
 }
 
-// Logout
-function logout() {
-  document.getElementById('appScreen').classList.remove('show');
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginPassword').value = '';
+function esc(s){
+  if(s===null||s===undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function openM(id){ document.getElementById(id).classList.add('on'); }
+function closeM(id){
+  document.getElementById(id).classList.remove('on');
+  var errs=document.querySelectorAll('.field-err');
+  for(var i=0;i<errs.length;i++) errs[i].style.display='none';
+}
+function clearErr(id){ var e=document.getElementById(id); if(e) e.style.display='none'; }
+function showErr(id){ document.getElementById(id).style.display='block'; }
+
+var WXMAP={0:['\u2600\uFE0F','Sereno'],1:['\uD83C\uDF24\uFE0F','Poco nuvoloso'],2:['\u26C5','Parzialmente nuvoloso'],3:['\u2601\uFE0F','Nuvoloso'],45:['\uD83C\uDF2B\uFE0F','Nebbia'],48:['\uD83C\uDF2B\uFE0F','Nebbia'],51:['\uD83C\uDF26\uFE0F','Pioviggine'],53:['\uD83C\uDF26\uFE0F','Pioviggine'],55:['\uD83C\uDF26\uFE0F','Pioviggine'],61:['\uD83C\uDF27\uFE0F','Pioggia leggera'],63:['\uD83C\uDF27\uFE0F','Pioggia'],65:['\uD83C\uDF27\uFE0F','Pioggia forte'],71:['\uD83C\uDF28\uFE0F','Neve'],73:['\uD83C\uDF28\uFE0F','Neve'],75:['\uD83C\uDF28\uFE0F','Neve'],80:['\uD83C\uDF26\uFE0F','Rovesci'],81:['\uD83C\uDF26\uFE0F','Rovesci'],82:['\u26C8\uFE0F','Rovesci forti'],95:['\u26C8\uFE0F','Temporale'],96:['\u26C8\uFE0F','Temporale'],99:['\u26C8\uFE0F','Temporale']};
+function wxIco(c){ return WXMAP[c] ? WXMAP[c][0] : '\uD83C\uDF21\uFE0F'; }
+function wxTxt(c){ return WXMAP[c] ? WXMAP[c][1] : '--'; }
+
+function fetchWx(){
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FRome&forecast_days=7';
+  fetch(url).then(function(r){
+    if(!r.ok) throw new Error('bad');
+    return r.json();
+  }).then(function(j){
+    wx=j; renderWxStrip(); renderWxTab();
+  }).catch(function(){
+    document.getElementById('wxStrip').innerHTML='<span class="wx-loading">Meteo non disponibile, controlla la connessione</span>';
+    document.getElementById('v-meteo').innerHTML='<div class="empty"><div class="e">\uD83D\uDCE1</div><p>Meteo non disponibile. Serve una connessione internet.</p></div>';
+  });
 }
 
-// Form
-function openForm() {
-  editingId = null;
-  document.getElementById('formTitle').textContent = 'Nuovo itinerario';
-  document.getElementById('inputName').value = '';
-  document.getElementById('inputStartDate').value = '';
-  document.getElementById('inputEndDate').value = '';
-  document.getElementById('inputLocation').value = '';
-  document.getElementById('inputBeaches').value = '';
-  document.getElementById('inputRestaurants').value = '';
-  document.getElementById('inputNotes').value = '';
-  document.getElementById('formModal').classList.add('show');
+function dayName(iso){
+  var d=new Date(iso+'T12:00:00');
+  return ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()];
 }
 
-function closeForm() {
-  document.getElementById('formModal').classList.remove('show');
-}
-
-function saveItinerary() {
-  const name = document.getElementById('inputName').value.trim();
-  const startDate = document.getElementById('inputStartDate').value.trim();
-  
-  if (!name || !startDate) {
-    alert('Nome e data di inizio obbligatori');
-    return;
+function renderWxStrip(){
+  if(!wx) return;
+  var c=wx.current, d=wx.daily;
+  var h='<div class="wx-now"><span class="ico">'+wxIco(c.weather_code)+'</span><div><div class="wx-temp">'+Math.round(c.temperature_2m)+'\u00B0</div><div class="wx-place">'+PLACE+' - '+wxTxt(c.weather_code)+'</div></div></div>';
+  h+='<div class="wx-div"></div><div class="wx-days">';
+  for(var i=1;i<=4;i++){
+    h+='<div class="wx-day"><div class="d">'+dayName(d.time[i])+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="t">'+Math.round(d.temperature_2m_max[i])+'\u00B0</div></div>';
   }
-  
-  const data = {
-    id: editingId || Date.now(),
-    name,
-    startDate,
-    endDate: document.getElementById('inputEndDate').value,
-    location: document.getElementById('inputLocation').value,
-    beaches: document.getElementById('inputBeaches').value,
-    restaurants: document.getElementById('inputRestaurants').value,
-    notes: document.getElementById('inputNotes').value
-  };
-  
-  if (editingId) {
-    itineraries = itineraries.map(i => i.id === editingId ? data : i);
+  h+='</div>';
+  document.getElementById('wxStrip').innerHTML=h;
+}
+
+function renderWxTab(){
+  if(!wx) return;
+  var c=wx.current, d=wx.daily, hr=wx.hourly;
+  var h='<div class="sec-head"><h2>Meteo a '+PLACE+'</h2></div>';
+  h+='<div class="wx-hero"><span class="big">'+wxIco(c.weather_code)+'</span><div><div class="deg">'+Math.round(c.temperature_2m)+'\u00B0C</div><div class="cond">'+wxTxt(c.weather_code)+'</div><div class="det">Umidita '+Math.round(c.relative_humidity_2m)+'% - Vento '+Math.round(c.wind_speed_10m)+' km/h</div></div></div>';
+
+  h+='<div class="panel" style="margin-bottom:12px"><div class="panel-head"><h3>Prossimi giorni</h3></div><div style="padding:12px 14px"><div class="wx-grid">';
+  for(var i=0;i<7;i++){
+    var lbl = i===0 ? 'Oggi' : dayName(d.time[i]);
+    h+='<div class="wx-cell"><div class="d">'+lbl+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="mx">'+Math.round(d.temperature_2m_max[i])+'\u00B0</div><div class="mn">min '+Math.round(d.temperature_2m_min[i])+'\u00B0</div></div>';
+  }
+  h+='</div></div></div>';
+
+  var now=new Date(), start=0;
+  for(var k=0;k<hr.time.length;k++){
+    if(new Date(hr.time[k])>=now){ start=k; break; }
+  }
+  h+='<div class="panel"><div class="panel-head"><h3>Prossime ore</h3></div><div style="padding:12px 14px"><div class="wx-hours">';
+  for(var m=start;m<start+8 && m<hr.time.length;m++){
+    h+='<div class="wx-hour"><div class="h">'+hr.time[m].slice(11,16)+'</div><div class="i">'+wxIco(hr.weather_code[m])+'</div><div class="t">'+Math.round(hr.temperature_2m[m])+'\u00B0</div></div>';
+  }
+  h+='</div></div></div>';
+  document.getElementById('v-meteo').innerHTML=h;
+}
+
+function renderAll(){ renderItin(); renderBudget(); renderPlaces(); renderContacts(); renderNotes(); }
+
+function renderItin(){
+  var h='<div class="sec-head"><h2>Itinerario</h2><button class="btn btn-primary" onclick="addDay()">+ Giorno</button></div>';
+  if(!data.days.length){
+    h+='<div class="empty"><div class="e">\uD83D\uDCC5</div><p>Nessun giorno ancora. Aggiungi il primo.</p></div>';
   } else {
-    itineraries.push(data);
-  }
-  
-  saveData();
-  renderGrid();
-  closeForm();
-}
-
-// Edit
-function editItinerary(id) {
-  const item = itineraries.find(i => i.id === id);
-  if (!item) return;
-  
-  editingId = id;
-  document.getElementById('formTitle').textContent = 'Modifica itinerario';
-  document.getElementById('inputName').value = item.name;
-  document.getElementById('inputStartDate').value = item.startDate;
-  document.getElementById('inputEndDate').value = item.endDate;
-  document.getElementById('inputLocation').value = item.location;
-  document.getElementById('inputBeaches').value = item.beaches;
-  document.getElementById('inputRestaurants').value = item.restaurants;
-  document.getElementById('inputNotes').value = item.notes;
-  document.getElementById('formModal').classList.add('show');
-}
-
-// Delete
-function deleteItinerary(id) {
-  if (confirm('Elimina questo itinerario?')) {
-    itineraries = itineraries.filter(i => i.id !== id);
-    saveData();
-    renderGrid();
-  }
-}
-
-// Render
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  
-  if (itineraries.length === 0) {
-    grid.innerHTML = '<div class="empty">Nessun itinerario salvato. Crea il tuo primo viaggio!</div>';
-    return;
-  }
-  
-  grid.innerHTML = itineraries.map(item => `
-    <div class="card">
-      <h3>${item.name}</h3>
-      ${item.location ? `<p>📍 ${item.location}</p>` : ''}
-      <p>📅 ${item.startDate}${item.endDate ? ` - ${item.endDate}` : ''}</p>
-      
-      ${item.beaches ? `
-        <div class="card-section">
-          <strong>Spiagge:</strong>
-          <p>${item.beaches}</p>
-        </div>
-      ` : ''}
-      
-      ${item.restaurants ? `
-        <div class="card-section">
-          <strong>Ristoranti:</strong>
-          <p>${item.restaurants}</p>
-        </div>
-      ` : ''}
-      
-      ${item.notes ? `
-        <div class="card-section">
-          <strong>Note:</strong>
-          <p>${item.notes}</p>
-        </div>
-      ` : ''}
-      
-      <div class="card-buttons">
-        <button class="btn-edit" onclick="editItinerary(${item.id})">Modifica</button>
-        <button class="btn-delete" onclick="deleteItinerary(${item.id})">Elimina</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-// Export
-function exportData() {
-  const data = JSON.stringify(itineraries, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `itineraries_${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-}
-
-// Import
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      itineraries = data;
-      saveData();
-      renderGrid();
-      alert('Itinerari importati con successo');
-    } catch {
-      alert('Errore nel file JSON');
+    for(var i=0;i<data.days.length;i++){
+      var day=data.days[i];
+      h+='<div class="day'+(day.open?' open':'')+'">';
+      h+='<div class="day-head" onclick="toggleDay('+day.id+')">';
+      h+='<div class="day-left"><div class="day-num">'+(i+1)+'</div><div><div class="day-title">'+esc(day.title)+'</div><div class="day-meta">'+day.acts.length+' attivita</div></div></div>';
+      h+='<div class="day-right"><button class="btn btn-primary btn-xs" onclick="event.stopPropagation();addAct('+day.id+')">+ Attivita</button>';
+      h+='<button class="icobtn" onclick="event.stopPropagation();renameDay('+day.id+')" title="Rinomina">\u270F\uFE0F</button>';
+      h+='<button class="icobtn" onclick="event.stopPropagation();delDay('+day.id+')" title="Elimina">\uD83D\uDDD1\uFE0F</button>';
+      h+='<span class="chev">\u25BC</span></div></div>';
+      h+='<div class="day-body">';
+      if(!day.acts.length){
+        h+='<div class="empty" style="padding:1.5rem 1rem"><p>Nessuna attivita. Aggiungine una.</p></div>';
+      } else {
+        for(var j=0;j<day.acts.length;j++){
+          var a=day.acts[j];
+          h+='<div class="act"><div class="act-time">'+esc(a.time)+'</div><div class="act-ico">'+esc(a.ico||'\uD83D\uDCCD')+'</div>';
+          h+='<div class="act-main"><div class="act-name">'+esc(a.name)+'</div>';
+          if(a.note) h+='<div class="act-note">'+esc(a.note)+'</div>';
+          if(a.cost) h+='<span class="act-cost">'+esc(a.cost)+'</span>';
+          h+='</div><div class="act-btns">';
+          if(a.maps) h+='<a href="'+esc(a.maps)+'" target="_blank" rel="noopener" class="maps-pill">\uD83D\uDCCD Maps</a>';
+          h+='<button class="icobtn" onclick="editActivity('+day.id+','+a.id+')" title="Modifica">\u270F\uFE0F</button>';
+          h+='<button class="icobtn" onclick="delAct('+day.id+','+a.id+')" title="Elimina">\uD83D\uDDD1\uFE0F</button>';
+          h+='</div></div>';
+        }
+      }
+      h+='</div></div>';
     }
-  };
-  reader.readAsText(file);
+  }
+  document.getElementById('v-itin').innerHTML=h;
 }
 
-// Init
-loadData();
-</script>
+function findDay(id){
+  for(var i=0;i<data.days.length;i++) if(data.days[i].id===id) return data.days[i];
+  return null;
+}
 
+function toggleDay(id){
+  var d=findDay(id);
+  d.open=!d.open; save(); renderItin();
+}
+function addDay(){
+  editDay=null;
+  document.getElementById('mDayTitle').textContent='Aggiungi giorno';
+  document.getElementById('dTitle').value='';
+  openM('mDay');
+}
+function renameDay(id){
+  var d=findDay(id);
+  editDay=id;
+  document.getElementById('mDayTitle').textContent='Rinomina giorno';
+  document.getElementById('dTitle').value=d.title;
+  openM('mDay');
+}
+function saveDay(){
+  var t=document.getElementById('dTitle').value.replace(/^\s+|\s+$/g,'');
+  if(!t){ showErr('dTitleErr'); return; }
+  if(editDay){ findDay(editDay).title=t; }
+  else { data.days.push({id:Date.now(),title:t,acts:[],open:true}); }
+  save(); closeM('mDay'); renderItin();
+}
+function delDay(id){
+  if(!confirm('Eliminare questo giorno e tutte le sue attivita?')) return;
+  var out=[];
+  for(var i=0;i<data.days.length;i++) if(data.days[i].id!==id) out.push(data.days[i]);
+  data.days=out; save(); renderItin();
+}
+
+function addAct(dayId){
+  activeDay=dayId; editAct=null;
+  document.getElementById('mActTitle').textContent='Aggiungi attivita';
+  var f=['aTime','aIco','aName','aNote','aCost','aMaps'];
+  for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  openM('mAct');
+}
+function editActivity(dayId,actId){
+  activeDay=dayId; editAct=actId;
+  var day=findDay(dayId), a=null;
+  for(var i=0;i<day.acts.length;i++) if(day.acts[i].id===actId) a=day.acts[i];
+  document.getElementById('mActTitle').textContent='Modifica attivita';
+  document.getElementById('aTime').value=a.time||'';
+  document.getElementById('aIco').value=a.ico||'';
+  document.getElementById('aName').value=a.name||'';
+  document.getElementById('aNote').value=a.note||'';
+  document.getElementById('aCost').value=a.cost||'';
+  document.getElementById('aMaps').value=a.maps||'';
+  openM('mAct');
+}
+function saveAct(){
+  var name=document.getElementById('aName').value.replace(/^\s+|\s+$/g,'');
+  if(!name){ showErr('aNameErr'); return; }
+  var obj={
+    id: editAct || Date.now(),
+    time:document.getElementById('aTime').value.replace(/^\s+|\s+$/g,''),
+    ico:document.getElementById('aIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCCD',
+    name:name,
+    note:document.getElementById('aNote').value.replace(/^\s+|\s+$/g,''),
+    cost:document.getElementById('aCost').value.replace(/^\s+|\s+$/g,''),
+    maps:document.getElementById('aMaps').value.replace(/^\s+|\s+$/g,'')
+  };
+  var day=findDay(activeDay);
+  if(editAct){
+    for(var i=0;i<day.acts.length;i++) if(day.acts[i].id===editAct) day.acts[i]=obj;
+  } else {
+    day.acts.push(obj); day.open=true;
+  }
+  save(); closeM('mAct'); renderItin();
+}
+function delAct(dayId,actId){
+  if(!confirm('Eliminare questa attivita?')) return;
+  var day=findDay(dayId), out=[];
+  for(var i=0;i<day.acts.length;i++) if(day.acts[i].id!==actId) out.push(day.acts[i]);
+  day.acts=out; save(); renderItin();
+}
+
+function renderBudget(){
+  var ex=data.expenses, tot=0, em=0, da=0;
+  for(var i=0;i<ex.length;i++){
+    var v=Number(ex[i].amt); tot+=v;
+    if(ex[i].who==='Emiliano') em+=v; else da+=v;
+  }
+  var each=tot/2, diff=em-each, settle;
+  if(Math.abs(diff)<0.5) settle='Siete in pari';
+  else if(diff>0) settle='Daniela deve '+Math.round(diff)+' euro a Emiliano';
+  else settle='Emiliano deve '+Math.round(-diff)+' euro a Daniela';
+
+  var h='<div class="sec-head"><h2>Budget</h2></div>';
+  h+='<div class="metrics">';
+  h+='<div class="metric"><div class="lbl">Totale viaggio</div><div class="val">'+Math.round(tot).toLocaleString('it-IT')+' \u20AC</div></div>';
+  h+='<div class="metric"><div class="lbl">Emiliano ha pagato</div><div class="val g">'+Math.round(em).toLocaleString('it-IT')+' \u20AC</div></div>';
+  h+='<div class="metric"><div class="lbl">Daniela ha pagato</div><div class="val c">'+Math.round(da).toLocaleString('it-IT')+' \u20AC</div></div>';
+  h+='<div class="metric"><div class="lbl">Quota a testa</div><div class="val">'+Math.round(each).toLocaleString('it-IT')+' \u20AC</div></div>';
+  h+='</div>';
+  h+='<div class="settle"><span class="ico">\u2696\uFE0F</span><div><div class="lbl">Conguaglio, divisione 50/50</div><div class="txt">'+settle+'</div></div></div>';
+
+  h+='<div class="panel"><div class="panel-head"><h3>Spese registrate</h3><button class="btn btn-primary btn-xs" onclick="addExp()">+ Spesa</button></div>';
+  if(!ex.length){
+    h+='<div class="empty" style="padding:2rem 1rem"><p>Nessuna spesa registrata.</p></div>';
+  } else {
+    for(var k=0;k<ex.length;k++){
+      var e=ex[k];
+      h+='<div class="row"><span class="row-ico">'+esc(e.ico||'\uD83D\uDCB6')+'</span>';
+      h+='<div class="row-main"><div class="row-name">'+esc(e.name)+'</div><div class="row-sub">'+esc(e.date)+' - '+esc(e.who)+'</div></div>';
+      h+='<div class="row-val">'+Math.round(Number(e.amt)).toLocaleString('it-IT')+' \u20AC</div>';
+      h+='<button class="icobtn" onclick="editExpense('+e.id+')">\u270F\uFE0F</button>';
+      h+='<button class="icobtn" onclick="delExp('+e.id+')">\uD83D\uDDD1\uFE0F</button></div>';
+    }
+  }
+  h+='</div>';
+  document.getElementById('v-budget').innerHTML=h;
+}
+
+function addExp(){
+  editExp=null;
+  document.getElementById('mExpTitle').textContent='Aggiungi spesa';
+  var f=['eIco','eDate','eName','eAmt'];
+  for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  document.getElementById('eWho').value='Emiliano';
+  openM('mExp');
+}
+function editExpense(id){
+  editExp=id;
+  var e=null;
+  for(var i=0;i<data.expenses.length;i++) if(data.expenses[i].id===id) e=data.expenses[i];
+  document.getElementById('mExpTitle').textContent='Modifica spesa';
+  document.getElementById('eIco').value=e.ico||'';
+  document.getElementById('eDate').value=e.date||'';
+  document.getElementById('eName').value=e.name||'';
+  document.getElementById('eAmt').value=e.amt;
+  document.getElementById('eWho').value=e.who;
+  openM('mExp');
+}
+function saveExp(){
+  var name=document.getElementById('eName').value.replace(/^\s+|\s+$/g,'');
+  var amt=parseFloat(document.getElementById('eAmt').value);
+  if(!name){ showErr('eNameErr'); return; }
+  if(isNaN(amt)||amt<=0){ showErr('eAmtErr'); return; }
+  var obj={
+    id: editExp||Date.now(),
+    ico:document.getElementById('eIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCB6',
+    date:document.getElementById('eDate').value.replace(/^\s+|\s+$/g,''),
+    name:name, amt:amt,
+    who:document.getElementById('eWho').value
+  };
+  if(editExp){
+    for(var i=0;i<data.expenses.length;i++) if(data.expenses[i].id===editExp) data.expenses[i]=obj;
+  } else { data.expenses.push(obj); }
+  save(); closeM('mExp'); renderBudget();
+}
+function delExp(id){
+  if(!confirm('Eliminare questa spesa?')) return;
+  var out=[];
+  for(var i=0;i<data.expenses.length;i++) if(data.expenses[i].id!==id) out.push(data.expenses[i]);
+  data.expenses=out; save(); renderBudget();
+}
+
+function renderPlaces(){
+  var h='<div class="sec-head"><h2>Da vedere</h2><button class="btn btn-primary" onclick="addPlace()">+ Posto</button></div>';
+  if(!data.places.length){
+    h+='<div class="empty"><div class="e">\uD83D\uDC40</div><p>Nessun posto ancora.</p></div>';
+  } else {
+    h+='<div class="place-grid">';
+    for(var i=0;i<data.places.length;i++){
+      var p=data.places[i];
+      h+='<div class="place"><div class="place-top"><span class="place-ico">'+esc(p.ico||'\uD83D\uDCCD')+'</span>';
+      h+='<div class="place-tt"><div class="place-name">'+esc(p.name)+'</div><div class="place-sub">'+esc(p.sub)+'</div></div>';
+      h+='<button class="icobtn" onclick="editPlaceFn('+p.id+')">\u270F\uFE0F</button>';
+      h+='<button class="icobtn" onclick="delPlace('+p.id+')">\uD83D\uDDD1\uFE0F</button></div>';
+      if(p.desc) h+='<div class="place-desc">'+esc(p.desc)+'</div>';
+      if(p.tag) h+='<span class="tagpill">'+esc(p.tag)+'</span>';
+      if(p.maps) h+='<a href="'+esc(p.maps)+'" target="_blank" rel="noopener" class="maps-full">\uD83D\uDCCD Apri in Google Maps</a>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  document.getElementById('v-vedere').innerHTML=h;
+}
+
+function addPlace(){
+  editPlaceId=null;
+  document.getElementById('mPlaceTitle').textContent='Aggiungi posto';
+  var f=['pIco','pTag','pName','pSub','pDesc','pMaps'];
+  for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  openM('mPlace');
+}
+function editPlaceFn(id){
+  editPlaceId=id;
+  var p=null;
+  for(var i=0;i<data.places.length;i++) if(data.places[i].id===id) p=data.places[i];
+  document.getElementById('mPlaceTitle').textContent='Modifica posto';
+  document.getElementById('pIco').value=p.ico||'';
+  document.getElementById('pTag').value=p.tag||'';
+  document.getElementById('pName').value=p.name||'';
+  document.getElementById('pSub').value=p.sub||'';
+  document.getElementById('pDesc').value=p.desc||'';
+  document.getElementById('pMaps').value=p.maps||'';
+  openM('mPlace');
+}
+function savePlace(){
+  var name=document.getElementById('pName').value.replace(/^\s+|\s+$/g,'');
+  if(!name){ showErr('pNameErr'); return; }
+  var obj={
+    id: editPlaceId||Date.now(),
+    ico:document.getElementById('pIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCCD',
+    tag:document.getElementById('pTag').value.replace(/^\s+|\s+$/g,''),
+    name:name,
+    sub:document.getElementById('pSub').value.replace(/^\s+|\s+$/g,''),
+    desc:document.getElementById('pDesc').value.replace(/^\s+|\s+$/g,''),
+    maps:document.getElementById('pMaps').value.replace(/^\s+|\s+$/g,'')
+  };
+  if(editPlaceId){
+    for(var i=0;i<data.places.length;i++) if(data.places[i].id===editPlaceId) data.places[i]=obj;
+  } else { data.places.push(obj); }
+  save(); closeM('mPlace'); renderPlaces();
+}
+function delPlace(id){
+  if(!confirm('Eliminare questo posto?')) return;
+  var out=[];
+  for(var i=0;i<data.places.length;i++) if(data.places[i].id!==id) out.push(data.places[i]);
+  data.places=out; save(); renderPlaces();
+}
+
+function conRow(c){
+  var h='<div class="contact-row"><span class="row-ico">'+esc(c.ico||'\uD83D\uDCDE')+'</span>';
+  h+='<div class="row-main"><div class="row-name">'+esc(c.name)+'</div><div class="row-sub">'+esc(c.sub)+'</div></div>';
+  h+='<a href="tel:'+esc(String(c.tel).replace(/\s/g,''))+'" class="tel-btn'+(c.type==='sos'?' sos':'')+'">\uD83D\uDCDE '+esc(c.tel)+'</a>';
+  h+='<button class="icobtn" onclick="editContact('+c.id+')">\u270F\uFE0F</button>';
+  h+='<button class="icobtn" onclick="delCon('+c.id+')">\uD83D\uDDD1\uFE0F</button></div>';
+  return h;
+}
+function renderContacts(){
+  var sos=[], norm=[];
+  for(var i=0;i<data.contacts.length;i++){
+    if(data.contacts[i].type==='sos') sos.push(data.contacts[i]); else norm.push(data.contacts[i]);
+  }
+  var h='<div class="sec-head"><h2>Contatti</h2><button class="btn btn-primary" onclick="addCon()">+ Contatto</button></div>';
+  if(sos.length){
+    h+='<div class="panel" style="margin-bottom:12px"><div class="panel-head"><h3>Emergenze</h3></div>';
+    for(var j=0;j<sos.length;j++) h+=conRow(sos[j]);
+    h+='</div>';
+  }
+  if(norm.length){
+    h+='<div class="panel"><div class="panel-head"><h3>Utili</h3></div>';
+    for(var k=0;k<norm.length;k++) h+=conRow(norm[k]);
+    h+='</div>';
+  }
+  if(!data.contacts.length){
+    h+='<div class="empty"><div class="e">\uD83D\uDCDE</div><p>Nessun contatto ancora.</p></div>';
+  }
+  document.getElementById('v-contatti').innerHTML=h;
+}
+function addCon(){
+  editCon=null;
+  document.getElementById('mConTitle').textContent='Aggiungi contatto';
+  var f=['cIco','cName','cSub','cTel'];
+  for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  document.getElementById('cType').value='normale';
+  openM('mCon');
+}
+function editContact(id){
+  editCon=id;
+  var c=null;
+  for(var i=0;i<data.contacts.length;i++) if(data.contacts[i].id===id) c=data.contacts[i];
+  document.getElementById('mConTitle').textContent='Modifica contatto';
+  document.getElementById('cIco').value=c.ico||'';
+  document.getElementById('cName').value=c.name||'';
+  document.getElementById('cSub').value=c.sub||'';
+  document.getElementById('cTel').value=c.tel||'';
+  document.getElementById('cType').value=c.type||'normale';
+  openM('mCon');
+}
+function saveCon(){
+  var name=document.getElementById('cName').value.replace(/^\s+|\s+$/g,'');
+  var tel=document.getElementById('cTel').value.replace(/^\s+|\s+$/g,'');
+  if(!name){ showErr('cNameErr'); return; }
+  if(!tel){ showErr('cTelErr'); return; }
+  var obj={
+    id: editCon||Date.now(),
+    ico:document.getElementById('cIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCDE',
+    name:name,
+    sub:document.getElementById('cSub').value.replace(/^\s+|\s+$/g,''),
+    tel:tel,
+    type:document.getElementById('cType').value
+  };
+  if(editCon){
+    for(var i=0;i<data.contacts.length;i++) if(data.contacts[i].id===editCon) data.contacts[i]=obj;
+  } else { data.contacts.push(obj); }
+  save(); closeM('mCon'); renderContacts();
+}
+function delCon(id){
+  if(!confirm('Eliminare questo contatto?')) return;
+  var out=[];
+  for(var i=0;i<data.contacts.length;i++) if(data.contacts[i].id!==id) out.push(data.contacts[i]);
+  data.contacts=out; save(); renderContacts();
+}
+
+var notesTimer=null;
+function renderNotes(){
+  var h='<div class="sec-head"><h2>Note</h2></div>';
+  h+='<textarea class="notes-area" id="notesBox" placeholder="Appunti, promemoria, password wifi, info pratiche"></textarea>';
+  h+='<div class="save-hint" id="notesHint">Le modifiche si salvano da sole</div>';
+  document.getElementById('v-note').innerHTML=h;
+  var box=document.getElementById('notesBox');
+  box.value=data.notes||'';
+  box.addEventListener('input',function(){
+    var self=this;
+    clearTimeout(notesTimer);
+    document.getElementById('notesHint').textContent='Salvataggio...';
+    notesTimer=setTimeout(function(){
+      data.notes=self.value; save();
+      var el=document.getElementById('notesHint');
+      if(el){
+        el.textContent='Salvato';
+        setTimeout(function(){
+          var e2=document.getElementById('notesHint');
+          if(e2) e2.textContent='Le modifiche si salvano da sole';
+        },1500);
+      }
+    },600);
+  });
+}
+
+function exportData(){
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='travelboard_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('pwd').addEventListener('keypress',function(e){ if(e.key==='Enter') doLogin(); });
+
+var ovs=document.querySelectorAll('.overlay');
+for(var oi=0;oi<ovs.length;oi++){
+  (function(o){
+    o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('on'); });
+  })(ovs[oi]);
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    var on=document.querySelectorAll('.overlay.on');
+    for(var i=0;i<on.length;i++) on[i].classList.remove('on');
+  }
+});
+</script>
 </body>
 </html>
