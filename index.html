@@ -79,6 +79,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 
 .sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
 .sec-head h2{font-size:17px;font-weight:600}
+.sub-head{font-size:13px;font-weight:600;color:var(--muted);margin:18px 0 10px;text-transform:uppercase;letter-spacing:.04em}
+.sub-head:first-child{margin-top:0}
 
 .day{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:12px}
 .day-head{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:background .15s}
@@ -111,6 +113,22 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .icobtn{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
 .icobtn:hover{background:var(--sand)}
 
+.walk-block{margin:0 16px 14px;background:var(--amber-light);border:1px solid #E8D9B8;border-radius:12px;overflow:hidden}
+.walk-head{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #E8D9B8}
+.walk-head-l{display:flex;align-items:center;gap:9px}
+.walk-head-l span.ico{font-size:20px}
+.walk-title{font-size:12px;font-weight:600;color:#7A5314}
+.walk-sub{font-size:10px;color:#A8761F}
+.walk-body{padding:12px 14px}
+.walk-place{font-size:13px;font-weight:600;margin-bottom:7px}
+.walk-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px}
+.walk-tags{display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap}
+.walk-tag{font-size:11px;background:#fff;color:var(--muted);padding:3px 9px;border-radius:20px}
+.walk-maps{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--green);color:#fff;border-radius:10px;font-size:12px;font-weight:500;text-decoration:none;transition:background .2s}
+.walk-maps:hover{background:var(--green-dark)}
+.walk-add{margin:0 16px 14px;padding:12px 14px;border:1.5px dashed #D8CBA6;border-radius:12px;text-align:center;font-size:12px;color:var(--amber);cursor:pointer;background:transparent;width:calc(100% - 32px);font-family:inherit;font-weight:500}
+.walk-add:hover{background:var(--amber-light)}
+
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
 .metric{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
 .metric .lbl{font-size:11px;color:var(--muted);margin-bottom:4px}
@@ -134,7 +152,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .row-sub{font-size:11px;color:var(--muted);margin-top:1px}
 .row-val{font-size:14px;font-weight:600;flex-shrink:0}
 
-.place-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.place-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-bottom:8px}
 .place{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;display:flex;flex-direction:column}
 .place-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
 .place-ico{font-size:24px;flex-shrink:0;line-height:1.1}
@@ -206,6 +224,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   .place-grid{grid-template-columns:1fr}
   .act{flex-wrap:wrap}
   .act-btns{width:100%;justify-content:flex-end;margin-top:6px}
+  .walk-block,.walk-add{margin-left:14px;margin-right:14px}
 }
 </style>
 </head>
@@ -293,6 +312,29 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   </div>
 </div>
 
+<div class="overlay" id="mWalk">
+  <div class="modal">
+    <h3 id="mWalkTitle">Consiglio della sera</h3>
+    <div class="fg"><label>Paesino / luogo</label><input type="text" id="wPlace" placeholder="Peschici" oninput="clearErr('wPlaceErr')">
+      <div class="field-err" id="wPlaceErr">Inserisci un luogo</div>
+    </div>
+    <div class="fg"><label>Percorso (tappe in sequenza)</label><textarea id="wDesc" placeholder="Porta del Ponte, Corso Garibaldi, vicoli, Castello, bastioni"></textarea></div>
+    <div class="frow">
+      <div class="fg"><label>Durata</label><input type="text" id="wDuration" placeholder="30-40 min"></div>
+      <div class="fg"><label>Tappe</label><input type="text" id="wStops" placeholder="5 tappe"></div>
+    </div>
+    <div class="fg">
+      <label>Link Maps punto di partenza</label>
+      <input type="url" id="wMaps" placeholder="https://maps.google.com/...">
+      <div class="hint">Metti il parcheggio o punto di partenza che preferisci: puoi cambiarlo quando vuoi.</div>
+    </div>
+    <div class="mfoot">
+      <button class="b-save" onclick="saveWalk()">Salva</button>
+      <button class="b-cancel" onclick="closeM('mWalk')">Annulla</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="mExp">
   <div class="modal">
     <h3 id="mExpTitle">Aggiungi spesa</h3>
@@ -325,7 +367,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
     <h3 id="mPlaceTitle">Aggiungi posto</h3>
     <div class="frow">
       <div class="fg"><label>Icona</label><input type="text" id="pIco" placeholder="emoji"></div>
-      <div class="fg"><label>Tag</label><input type="text" id="pTag" placeholder="Must"></div>
+      <div class="fg"><label>Categoria</label><select id="pCat"><option value="spiaggia">Spiaggia</option><option value="vedere">Punto di interesse</option></select></div>
     </div>
     <div class="fg">
       <label>Nome</label>
@@ -333,6 +375,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="field-err" id="pNameErr">Inserisci un nome</div>
     </div>
     <div class="fg"><label>Sottotitolo</label><input type="text" id="pSub" placeholder="Vieste, 45 min"></div>
+    <div class="fg"><label>Tag</label><input type="text" id="pTag" placeholder="Must, Iconico, Alternativa..."></div>
     <div class="fg"><label>Descrizione</label><textarea id="pDesc" placeholder="Perche vale la pena andarci"></textarea></div>
     <div class="fg"><label>Link Google Maps</label><input type="url" id="pMaps" placeholder="https://maps.google.com/..."></div>
     <div class="mfoot">
@@ -368,77 +411,84 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 </div>
 
 <script>
-var PASSWORD='Dej4vu_77';
+var PASSWORD='gargano2026';
 var LAT=41.9487, LON=16.0131, PLACE='Peschici';
 
 var seed={
   days:[
     {id:1,title:'Giovedi 28 Agosto - Arrivo',open:true,acts:[
-      {id:101,time:'Mattina',ico:'\uD83D\uDE97',name:'Partenza da Roma',note:'Circa 5h di viaggio. A1 poi A16 poi SS693. Controlla il NOCO booster nel bagagliaio.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Roma/Peschici'},
-      {id:102,time:'Pomeriggio',ico:'\uD83C\uDFE1',name:'Check-in Residence Jolly',note:'Localita Paglianza, Peschici. Parcheggio incluso. Chiedi la password del wifi.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
-      {id:103,time:'20:00',ico:'\uD83C\uDFD8\uFE0F',name:'Prima passeggiata a Peschici',note:'Centro storico bianco sulla scogliera. Cena leggera, gelato, ricognizione della zona.',cost:'35 euro circa',maps:'https://www.google.com/maps/search/Peschici+centro+storico'}
-    ]},
-    {id:2,title:'Venerdi 29 Agosto - Spiagge vicine',open:false,acts:[
-      {id:201,time:'09:00',ico:'\uD83C\uDFD6\uFE0F',name:'Spiaggia di Procinisco',note:'Piccola e tranquilla. Strada di accesso ripida ma gestibile. Spiaggia libera sul retro.',cost:'25 euro lettini e parking',maps:'https://maps.google.com/?cid=1561469096568184047'},
-      {id:202,time:'13:00',ico:'\uD83C\uDF7D\uFE0F',name:'Pranzo al ristorante della spiaggia',note:'Pesce fresco a prezzi onesti, molto apprezzato dai recensori.',cost:'45 euro',maps:'https://maps.google.com/?cid=1561469096568184047'},
-      {id:203,time:'17:00',ico:'\uD83C\uDF0A',name:'Baia di Peschici',note:'Spiaggia principale, lunga passeggiata sul bagnasciuga fino alle calette.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
-      {id:204,time:'20:00',ico:'\u2B50',name:'Cena Da Nonna Italia',note:'PRENOTARE. Vista tramonto eccezionale, pasta fatta in casa, vongole con bottarga.',cost:'70 euro',maps:'https://maps.google.com/?cid=3544764396454536334'}
-    ]},
-    {id:3,title:'Sabato 30 Agosto - Est e Rodi',open:false,acts:[
-      {id:301,time:'09:00',ico:'\uD83C\uDFD6\uFE0F',name:'Zaiana Beach',note:'Ampia e attrezzata, acque bellissime. Trabucco storico nelle vicinanze.',cost:'25 euro',maps:'https://maps.google.com/?cid=2629661639351755331'},
-      {id:302,time:'16:00',ico:'\uD83C\uDF32',name:'Sfinale Beach',note:'La piu vicina al residence, circa 8 minuti. Sabbia fine, pineta, torre saracena.',cost:'20 euro',maps:'https://maps.google.com/?cid=9565958954535631846'},
-      {id:303,time:'19:30',ico:'\uD83C\uDF05',name:'Rodi Garganico al tramonto',note:'25 minuti di auto. Lungomare panoramico, aperitivo con vista sul mare.',cost:'20 euro',maps:'https://www.google.com/maps/search/Rodi+Garganico+lungomare'},
-      {id:304,time:'21:00',ico:'\uD83C\uDF5D',name:'Cena Trattoria Pane e Pomodoro',note:'Orecchiette pistacchio e gamberi. Porzioni generose, vista mare.',cost:'60 euro',maps:'https://maps.google.com/?cid=14813282956050820855'}
-    ]},
-    {id:4,title:'Domenica 31 Agosto - Relax',open:false,acts:[
-      {id:401,time:'10:00',ico:'\uD83E\uDD3F',name:'Spiaggia di Calalunga',note:'Baia chiusa con scogliere, acqua profonda e trasparente. Ideale per nuotare.',cost:'25 euro',maps:'https://maps.google.com/?cid=10329733903097553584'},
-      {id:402,time:'18:00',ico:'\uD83D\uDED2',name:'Spesa e preparativi',note:'Prepara lo zaino per le Tremiti: acqua, creme, snack, costume di ricambio, powerbank.',cost:'30 euro',maps:''},
-      {id:403,time:'20:30',ico:'\uD83D\uDC1F',name:'Cena I Tre Archi',note:'Centro storico di Peschici. Fritto misto delicato, semifreddo Ferrero Rocher.',cost:'65 euro',maps:'https://www.google.com/maps/search/I+Tre+Archi+Peschici'}
-    ]},
-    {id:5,title:'Lunedi 1 Settembre - Isole Tremiti',open:false,acts:[
-      {id:501,time:'06:45',ico:'\u23F0',name:'Sveglia e colazione veloce',note:'Zaino pronto dalla sera prima. Controlla il biglietto sul telefono.',cost:'',maps:''},
-      {id:502,time:'07:15',ico:'\uD83D\uDE97',name:'Auto verso il Porto di Peschici',note:'10 minuti dal residence. Parcheggio nei pressi del porto, a pagamento.',cost:'10 euro parking',maps:'https://maps.google.com/?cid=6843945624796536268'},
-      {id:503,time:'07:30',ico:'\uD83D\uDEA2',name:'Traghetto Navitremiti',note:'Biglietti su navitremiti.com, prenotare online in anticipo. Traversata circa 1 ora.',cost:'90 euro in due',maps:'https://maps.google.com/?cid=6843945624796536268'},
-      {id:504,time:'09:00',ico:'\uD83C\uDFDD\uFE0F',name:'Arrivo a San Domino',note:'Contatta Mare e Stelle al 371 489 1806 per il tour privato in barca.',cost:'',maps:'https://www.google.com/maps/search/Isole+Tremiti+San+Domino'},
-      {id:505,time:'09:30',ico:'\u26F5',name:'Tour in barca con Mare e Stelle',note:'4-5 ore. Grotta dei Pagliai, statua sommersa di Padre Pio, soste per nuotare, ricci freschi.',cost:'130 euro in due',maps:'https://www.google.com/maps/search/Isole+Tremiti'},
-      {id:506,time:'17:00',ico:'\uD83D\uDEA2',name:'Traghetto di rientro',note:'Rientro a Peschici verso le 18. Cena leggera al residence, giornata intensa.',cost:'',maps:'https://maps.google.com/?cid=6843945624796536268'}
-    ]},
-    {id:6,title:'Martedi 2 Settembre - Vieste',open:false,acts:[
-      {id:601,time:'09:30',ico:'\uD83C\uDFD6\uFE0F',name:'Mattina in spiaggia',note:'Scegli in base al meteo. Sfinale per comodita, Calalunga per nuotare.',cost:'25 euro',maps:'https://maps.google.com/?cid=9565958954535631846'},
-      {id:602,time:'16:00',ico:'\uD83D\uDE97',name:'Partenza per Vieste',note:'45 minuti di auto lungo la costa. Panorami bellissimi, fermati per le foto.',cost:'',maps:'https://www.google.com/maps/search/Vieste+centro+storico'},
-      {id:603,time:'17:30',ico:'\uD83C\uDFF0',name:'Centro storico di Vieste',note:'Pizzomunno, vicoli bianchi, belvedere. Aperitivo con vista sul mare.',cost:'25 euro',maps:'https://www.google.com/maps/search/Vieste+Pizzomunno'},
-      {id:604,time:'20:00',ico:'\u2764\uFE0F',name:'Cena Osteria Al Vicolo dell Amore',note:'PRENOTARE, e piccola. Sotto le scale con i cuori dipinti. Cucina eccellente.',cost:'75 euro',maps:'https://maps.google.com/?cid=14313543614219014030'}
-    ]},
+      {id:101,time:'Mattina',ico:'🚗',name:'Partenza da Roma',note:'Circa 5h di viaggio. A1 poi A16 poi SS693. Controlla il NOCO booster nel bagagliaio.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Roma/Peschici'},
+      {id:102,time:'Pomeriggio',ico:'🏊',name:'Piscina del Residence',note:'Relax in piscina in attesa del check-in, senza fretta.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
+      {id:103,time:'17:00',ico:'🏡',name:'Check-in Residence Jolly',note:'Localita Paglianza, Peschici. Parcheggio incluso. Chiedi la password del wifi.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
+      {id:104,time:'20:00',ico:'⭐',name:'Cena Da Nonna Italia',note:'Vista tramonto, pasta fatta in casa, vongole con bottarga. Low budget: panetteria/gastronomia del centro per panino e birra, circa 12 euro.',cost:'70 euro',maps:'https://maps.google.com/?cid=3544764396454536334'}
+    ],walk:{place:'Peschici',desc:'Porta del Ponte e Torre di avvistamento -> Corso Garibaldi -> vicoli del centro storico -> Castello (vista panoramica) -> bastioni con le torri saracene',duration:'30-40 min',stops:'5 tappe',maps:'https://www.google.com/maps/search/Porta+del+Ponte+Peschici'}},
+
+    {id:2,title:'Venerdi 29 Agosto - Procinisco e Rodi Garganico',open:false,acts:[
+      {id:201,time:'09:00',ico:'🏖️',name:'Spiaggia libera di Procinisco',note:'Spiaggia libera, niente stabilimenti. Portati ombrellone, sdraio e pranzo al sacco. Parcheggio a pagamento vicino.',cost:'5 euro parking',maps:'https://maps.google.com/?cid=1561469096568184047'},
+      {id:202,time:'20:00',ico:'🍝',name:'Cena Trattoria Pane e Pomodoro',note:'Rodi Garganico. Orecchiette pistacchio e gamberi, porzioni generose, vista mare. Low budget: pizza al taglio o panino al porto, circa 8-10 euro.',cost:'60 euro',maps:'https://maps.google.com/?cid=14813282956050820855'}
+    ],walk:{place:'Rodi Garganico',desc:'Piazza Padre Pio (parcheggio) -> Chiesa di San Pietro -> mura e torri del Castello -> vicoli del quartiere Chepabbash -> Piazza degli Innamorati -> Santuario Madonna della Libera',duration:'25-35 min',stops:'6 tappe',maps:'https://www.google.com/maps/search/Piazza+Padre+Pio+Rodi+Garganico'}},
+
+    {id:3,title:'Sabato 30 Agosto - Calalunga e Vieste',open:false,acts:[
+      {id:301,time:'09:30',ico:'🤿',name:'Spiaggia libera di Calalunga',note:'Baia chiusa con scogliere, acqua profonda e trasparente, ideale per nuotare. Spiaggia libera, portati tutto.',cost:'',maps:'https://maps.google.com/?cid=10329733903097553584'},
+      {id:302,time:'20:00',ico:'❤️',name:'Cena Trattoria Il Paniere',note:'Vieste, balcone vista mare. Low budget: PANINO CON POLPO da chioschetto del porto, la specialita del Gargano, circa 8-12 euro.',cost:'55 euro',maps:'https://www.google.com/maps/search/Trattoria+Il+Paniere+Vieste'}
+    ],walk:{place:'Vieste',desc:'Arco di Via Duomo -> Cattedrale di Santa Maria Assunta -> Chianca Amara -> Chiesa di San Francesco e Piazzetta Petrone -> Castello Svevo Aragonese (vista Pizzomunno) -> Lungomare Mattei',duration:'40-50 min',stops:'6 tappe',maps:'https://www.google.com/maps/search/Cattedrale+di+Vieste'}},
+
+    {id:4,title:'Domenica 31 Agosto - Sfinale e Testa del Gargano',open:false,acts:[
+      {id:401,time:'09:30',ico:'🌲',name:'Spiaggia libera di Sfinale',note:'La piu vicina al residence, circa 8 minuti. Sabbia fine, pineta, torre saracena. Spiaggia libera.',cost:'',maps:'https://maps.google.com/?cid=9565958954535631846'},
+      {id:402,time:'20:00',ico:'🐚',name:'Cena in trattoria locale',note:'Testa del Gargano, piccolo paesino, pesce fresco locale. Low budget: paninoteca o bar del paese, circa 10 euro.',cost:'50 euro',maps:'https://www.google.com/maps/search/Testa+del+Gargano'}
+    ],walk:{place:'Testa del Gargano',desc:'Breve giro tra le viuzze del paesino, il porticciolo peschereccio e il belvedere sulla costa',duration:'20-30 min',stops:'3 tappe',maps:'https://www.google.com/maps/search/Testa+del+Gargano'}},
+
+    {id:5,title:'Lunedi 1 Settembre - Isole Tremiti (Compleanno)',open:false,acts:[
+      {id:501,time:'06:45',ico:'⏰',name:'Sveglia e colazione veloce',note:'Zaino pronto dalla sera prima. Controlla il biglietto sul telefono.',cost:'',maps:''},
+      {id:502,time:'07:15',ico:'🚗',name:'Auto verso il Porto di Peschici',note:'10 minuti dal residence. Parcheggio nei pressi del porto, a pagamento.',cost:'10 euro parking',maps:'https://maps.google.com/?cid=6843945624796536268'},
+      {id:503,time:'07:30',ico:'🚢',name:'Traghetto Navitremiti',note:'Biglietti su navitremiti.com, prenotare online in anticipo. Traversata circa 1 ora.',cost:'90 euro in due',maps:'https://maps.google.com/?cid=6843945624796536268'},
+      {id:504,time:'09:00',ico:'🏝️',name:'Arrivo a San Domino',note:'Contatta Mare e Stelle al 371 489 1806 per il tour privato in barca.',cost:'',maps:'https://www.google.com/maps/search/Isole+Tremiti+San+Domino'},
+      {id:505,time:'09:30',ico:'⛵',name:'Tour in barca con Mare e Stelle',note:'4-5 ore. Grotta dei Pagliai, statua sommersa di Padre Pio, soste per nuotare, ricci freschi.',cost:'130 euro in due',maps:'https://www.google.com/maps/search/Isole+Tremiti'},
+      {id:506,time:'17:00',ico:'🚢',name:'Traghetto di rientro',note:'ATTENZIONE: parte nel pomeriggio, non perderlo! Rientro a Peschici verso le 18.',cost:'',maps:'https://maps.google.com/?cid=6843945624796536268'},
+      {id:507,time:'20:30',ico:'🎂',name:'Cena di compleanno - I Tre Archi',note:'Peschici, vista mare, semifreddo Ferrero Rocher. Se pieno: Trattoria Al Faro. Volendo fare una gita: Osteria Al Vicolo dell Amore o Trattoria Il Paniere a Vieste (45 min). Low budget: panino con polpo o pizza al taglio centro Peschici, circa 12-15 euro.',cost:'75 euro'  ,maps:'https://www.google.com/maps/search/I+Tre+Archi+Peschici'}
+    ],walk:{place:'Peschici (Marina)',desc:'Passeggiata al porto, marina illuminata, bar e gelaterie sul lungomare basso',duration:'20-30 min',stops:'3 tappe',maps:'https://www.google.com/maps/search/Marina+di+Peschici'}},
+
+    {id:6,title:'Martedi 2 Settembre - Spiaggia e Monte Sant Angelo',open:false,acts:[
+      {id:601,time:'09:30',ico:'🏖️',name:'Spiaggia libera - Zaiana Beach',note:'Non ancora vista: ampia e attrezzata, acque bellissime, trabucco storico vicino. In alternativa torna nella tua preferita tra Procinisco, Calalunga o Sfinale.',cost:'',maps:'https://maps.google.com/?cid=2629661639351755331'},
+      {id:602,time:'19:00',ico:'🚗',name:'Partenza per Monte Sant Angelo',note:'Circa 1h di auto verso l entroterra del Gargano.',cost:'',maps:'https://www.google.com/maps/search/Monte+Sant+Angelo'},
+      {id:603,time:'20:30',ico:'🍽️',name:'Cena Casa Li Jalantuumene',note:'Nel Rione Junno, cicorielle di campo, paste fatte in casa, carni podoliche. Low budget: puccia o focaccia con polpo fritto, circa 10 euro.',cost:'55 euro',maps:'https://www.google.com/maps/search/Casa+Li+Jalantuumene+Monte+Sant+Angelo'}
+    ],walk:{place:'Monte Sant Angelo',desc:'Santuario di San Michele Arcangelo -> Via Reale Basilica -> Rione Junno -> Castello Normanno-Svevo -> Tomba di Rotari',duration:'40-50 min',stops:'5 tappe',maps:'https://maps.google.com/?cid=2695649454165254931'}},
+
     {id:7,title:'Mercoledi 3 Settembre - Rientro',open:false,acts:[
-      {id:701,time:'09:00',ico:'\uD83C\uDF0A',name:'Ultima nuotata',note:'La tua spiaggia preferita della settimana. Goditela senza fretta.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
-      {id:702,time:'11:30',ico:'\uD83E\uDDF3',name:'Check-out dal Residence Jolly',note:'Bagagli in auto, ultimo caffe nel centro storico di Peschici.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
-      {id:703,time:'13:00',ico:'\uD83D\uDE97',name:'Partenza verso Roma',note:'Circa 5 ore. Pausa consigliata dopo 2 ore di guida. Buon rientro.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Peschici/Roma'}
-    ]}
+      {id:701,time:'09:00',ico:'🌊',name:'Ultima nuotata',note:'La tua spiaggia preferita della settimana. Goditela senza fretta.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
+      {id:702,time:'11:30',ico:'🧳',name:'Check-out dal Residence Jolly',note:'Bagagli in auto, ultimo caffe nel centro storico di Peschici.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
+      {id:703,time:'13:00',ico:'🚗',name:'Partenza verso Roma',note:'Circa 5 ore. Pausa consigliata dopo 2 ore di guida. Buon rientro.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Peschici/Roma'}
+    ],walk:null}
   ],
   expenses:[
-    {id:1001,ico:'\uD83C\uDFE1',name:'Residence Jolly, 6 notti',date:'28 Ago',amt:480,who:'Emiliano'},
-    {id:1002,ico:'\u26FD',name:'Benzina andata',date:'28 Ago',amt:85,who:'Emiliano'}
+    {id:1001,ico:'🏡',name:'Residence Jolly, 6 notti',date:'28 Ago',amt:480,who:'Emiliano'},
+    {id:1002,ico:'⛽',name:'Benzina andata',date:'28 Ago',amt:85,who:'Emiliano'}
   ],
   places:[
-    {id:2001,ico:'\uD83D\uDDFF',name:'Pizzomunno',sub:'Vieste, 45 min',tag:'Iconico',desc:'Monolite bianco di 25 metri sulla spiaggia di Vieste, legato a una leggenda locale. Meglio all alba o al tramonto, quando la luce lo accende e non c e folla.',maps:'https://www.google.com/maps/search/Pizzomunno+Vieste'},
-    {id:2002,ico:'\uD83C\uDFA3',name:'Trabucco da Mimi',sub:'Peschici, 10 min',tag:'Autentico',desc:'Antica macchina da pesca in legno a picco sul mare, ancora funzionante. Struttura protetta e visitabile. Al tramonto la vista e memorabile.',maps:'https://www.google.com/maps/search/Trabucco+da+Mimi+Peschici'},
-    {id:2003,ico:'\u26EA',name:'Santuario di San Michele',sub:'Monte Sant Angelo, 1h',tag:'UNESCO',desc:'Basilica scavata nella roccia, patrimonio UNESCO, meta di pellegrinaggio da 1500 anni. La grotta e impressionante. Abbinabile al castello normanno.',maps:'https://maps.google.com/?cid=2695649454165254931'},
-    {id:2004,ico:'\uD83C\uDF32',name:'Foresta Umbra',sub:'Centro Gargano, 40 min',tag:'Natura',desc:'Faggeta secolare patrimonio UNESCO, temperature fresche anche ad agosto. Sentieri facili e ben segnalati. Ottima alternativa se il meteo peggiora.',maps:'https://www.google.com/maps/search/Foresta+Umbra+Gargano'},
-    {id:2005,ico:'\uD83D\uDD73\uFE0F',name:'Grotte marine di Vieste',sub:'In barca dal porto',tag:'Da mare',desc:'Costa scavata da decine di grotte: dei Contrabbandieri, dei Due Occhi, Campana. Si vedono solo dal mare, con i gozzi che partono dal porto di Vieste.',maps:'https://www.google.com/maps/search/Grotte+marine+Vieste'},
-    {id:2006,ico:'\uD83C\uDFDB\uFE0F',name:'Abbazia Santa Maria a Mare',sub:'Isole Tremiti, San Nicola',tag:'Storia',desc:'Complesso monastico fortificato dell XI secolo su San Nicola. Mosaico pavimentale e vista sull arcipelago. Vale il salto se il tour in barca lo permette.',maps:'https://www.google.com/maps/search/Abbazia+Santa+Maria+a+Mare+Tremiti'}
+    {id:2001,ico:'🏖️',name:'Spiaggia di Procinisco',sub:'10 min dal residence',tag:'Spiaggia libera',desc:'Piccola e tranquilla, strada di accesso ripida ma gestibile. Spiaggia libera sul retro del ristorante.',cat:'spiaggia',maps:'https://maps.google.com/?cid=1561469096568184047'},
+    {id:2002,ico:'🤿',name:'Spiaggia di Calalunga',sub:'15 min dal residence',tag:'Spiaggia libera',desc:'Baia chiusa con scogliere, acqua profonda e trasparente. Ideale per nuotare, niente stabilimenti.',cat:'spiaggia',maps:'https://maps.google.com/?cid=10329733903097553584'},
+    {id:2003,ico:'🌲',name:'Sfinale Beach',sub:'8 min dal residence',tag:'Spiaggia libera',desc:'La piu vicina al residence. Sabbia fine, pineta, torre saracena, spiaggia libera.',cat:'spiaggia',maps:'https://maps.google.com/?cid=9565958954535631846'},
+    {id:2004,ico:'🏖️',name:'Zaiana Beach',sub:'12 min dal residence',tag:'Alternativa',desc:'Ampia e attrezzata, acque bellissime, trabucco storico nelle vicinanze. Non ancora vista in questo viaggio.',cat:'spiaggia',maps:'https://maps.google.com/?cid=2629661639351755331'},
+    {id:2005,ico:'🗿',name:'Pizzomunno',sub:'Vieste, 45 min',tag:'Iconico',desc:'Monolite bianco di 25 metri sulla spiaggia di Vieste, legato a una leggenda locale. Meglio all alba o al tramonto.',cat:'vedere',maps:'https://www.google.com/maps/search/Pizzomunno+Vieste'},
+    {id:2006,ico:'🎣',name:'Trabucco da Mimi',sub:'Peschici, 10 min',tag:'Autentico',desc:'Antica macchina da pesca in legno a picco sul mare, ancora funzionante. Al tramonto la vista e memorabile.',cat:'vedere',maps:'https://www.google.com/maps/search/Trabucco+da+Mimi+Peschici'},
+    {id:2007,ico:'⛪',name:'Santuario di San Michele',sub:'Monte Sant Angelo, 1h',tag:'UNESCO',desc:'Basilica scavata nella roccia, patrimonio UNESCO, meta di pellegrinaggio da 1500 anni.',cat:'vedere',maps:'https://maps.google.com/?cid=2695649454165254931'},
+    {id:2008,ico:'🌲',name:'Foresta Umbra',sub:'Centro Gargano, 40 min',tag:'Natura',desc:'Faggeta secolare patrimonio UNESCO, temperature fresche anche ad agosto. Ottima alternativa se il meteo peggiora.',cat:'vedere',maps:'https://www.google.com/maps/search/Foresta+Umbra+Gargano'},
+    {id:2009,ico:'🕳️',name:'Grotte marine di Vieste',sub:'In barca dal porto',tag:'Da mare',desc:'Costa scavata da decine di grotte, si vedono solo dal mare con i gozzi che partono dal porto di Vieste.',cat:'vedere',maps:'https://www.google.com/maps/search/Grotte+marine+Vieste'},
+    {id:2010,ico:'🏛️',name:'Abbazia Santa Maria a Mare',sub:'Isole Tremiti, San Nicola',tag:'Storia',desc:'Complesso monastico fortificato dell XI secolo. Vale il salto se il tour in barca lo permette, ma occhio all orario del traghetto.',cat:'vedere',maps:'https://www.google.com/maps/search/Abbazia+Santa+Maria+a+Mare+Tremiti'}
   ],
   contacts:[
-    {id:3001,ico:'\uD83C\uDD98',name:'Numero unico emergenze',sub:'Valido in tutta Europa',tel:'112',type:'sos'},
-    {id:3002,ico:'\uD83C\uDFE5',name:'Ospedale San Timoteo',sub:'Termoli, pronto soccorso',tel:'0875 7181',type:'sos'},
-    {id:3003,ico:'\uD83D\uDC8A',name:'Farmacia Peschici',sub:'Centro, turni notturni affissi',tel:'0884 964037',type:'normale'},
-    {id:3004,ico:'\uD83D\uDE97',name:'Soccorso stradale ACI',sub:'Assistenza auto 24h',tel:'803116',type:'sos'},
-    {id:3005,ico:'\u2B50',name:'Da Nonna Italia',sub:'Ristorante Peschici',tel:'334 984 7725',type:'normale'},
-    {id:3006,ico:'\u2764\uFE0F',name:'Osteria Al Vicolo dell Amore',sub:'Ristorante Vieste',tel:'350 567 6232',type:'normale'},
-    {id:3007,ico:'\uD83C\uDF5D',name:'Trattoria Pane e Pomodoro',sub:'Ristorante Rodi Garganico',tel:'324 929 0321',type:'normale'},
-    {id:3008,ico:'\u26F5',name:'Mare e Stelle',sub:'Tour in barca Tremiti',tel:'371 489 1806',type:'normale'},
-    {id:3009,ico:'\uD83D\uDEA2',name:'Navitremiti',sub:'Traghetti Peschici Tremiti',tel:'0884 962732',type:'normale'}
+    {id:3001,ico:'🆘',name:'Numero unico emergenze',sub:'Valido in tutta Europa',tel:'112',type:'sos'},
+    {id:3002,ico:'🏥',name:'Ospedale San Timoteo',sub:'Termoli, pronto soccorso',tel:'0875 7181',type:'sos'},
+    {id:3003,ico:'💊',name:'Farmacia Peschici',sub:'Centro, turni notturni affissi',tel:'0884 964037',type:'normale'},
+    {id:3004,ico:'🚗',name:'Soccorso stradale ACI',sub:'Assistenza auto 24h',tel:'803116',type:'sos'},
+    {id:3005,ico:'⭐',name:'Da Nonna Italia',sub:'Ristorante Peschici',tel:'334 984 7725',type:'normale'},
+    {id:3006,ico:'🍝',name:'Trattoria Pane e Pomodoro',sub:'Ristorante Rodi Garganico',tel:'324 929 0321',type:'normale'},
+    {id:3007,ico:'❤️',name:'Trattoria Il Paniere',sub:'Ristorante Vieste',tel:'0884 707153',type:'normale'},
+    {id:3008,ico:'⛵',name:'Mare e Stelle',sub:'Tour in barca Tremiti',tel:'371 489 1806',type:'normale'},
+    {id:3009,ico:'🚢',name:'Navitremiti',sub:'Traghetti Peschici Tremiti',tel:'0884 962732',type:'normale'},
+    {id:3010,ico:'🎂',name:'I Tre Archi',sub:'Ristorante Peschici, compleanno',tel:'0884 963377',type:'normale'}
   ],
-  notes:'INFO VIAGGIO\n\nPercorso Roma - Peschici: circa 430 km, 4h30-5h.\nA1 Roma-Napoli, poi A16 Napoli-Canosa, poi A14 verso Foggia, uscita Poggio Imperiale, SS693 costiera.\nPedaggi stimati: 28-32 euro a tratta.\nBenzina stimata: 80-90 euro a tratta.\n\nDA NON DIMENTICARE\n\n- NOCO G3500 booster nel bagagliaio (batteria 12V da tenere d occhio)\n- Creme solari alta protezione, il sole del Gargano picchia\n- Scarpe da scoglio per Calalunga\n- Powerbank per la giornata alle Tremiti\n- Contanti: molti lidi e parcheggi non accettano carte\n- Documenti e tessera sanitaria\n\nNOTE PRATICHE\n\nParcheggi spiagge: 4-5 euro al giorno.\nLettini e ombrellone: 20-25 euro.\nRistoranti: prenotare sempre, ad agosto si riempie tutto.\nStrade per le calette: strette e ripide, guida con calma.\n\nWIFI RESIDENCE:\n\n\nALTRO:\n'
+  notes:'INFO VIAGGIO\n\nPercorso Roma - Peschici: circa 430 km, 4h30-5h.\nA1 Roma-Napoli, poi A16 Napoli-Canosa, poi A14 verso Foggia, uscita Poggio Imperiale, SS693 costiera.\nPedaggi stimati: 28-32 euro a tratta.\nBenzina stimata: 80-90 euro a tratta.\n\nDA NON DIMENTICARE\n\n- NOCO G3500 booster nel bagagliaio (batteria 12V da tenere d occhio)\n- Creme solari alta protezione, il sole del Gargano picchia\n- Scarpe da scoglio per Calalunga\n- Powerbank per la giornata alle Tremiti\n- Contanti: le spiagge libere e molti parcheggi non accettano carte\n- Documenti e tessera sanitaria\n\nNOTE PRATICHE\n\nSpiagge tutte libere quest anno: portare ombrellone, sdraio, pranzo al sacco.\nParcheggi spiagge: 4-5 euro al giorno.\nRistoranti: prenotare sempre, ad agosto si riempie tutto.\nStrade per le calette: strette e ripide, guida con calma.\nIl 1 settembre e il compleanno: traghetto di rientro nel pomeriggio, non perderlo.\n\nWIFI RESIDENCE:\n\n\nALTRO:\n'
 };
 
 var data=null, activeDay=null, editAct=null, editDay=null, editExp=null, editPlaceId=null, editCon=null, wx=null;
@@ -489,8 +539,8 @@ function closeM(id){
 function clearErr(id){ var e=document.getElementById(id); if(e) e.style.display='none'; }
 function showErr(id){ document.getElementById(id).style.display='block'; }
 
-var WXMAP={0:['\u2600\uFE0F','Sereno'],1:['\uD83C\uDF24\uFE0F','Poco nuvoloso'],2:['\u26C5','Parzialmente nuvoloso'],3:['\u2601\uFE0F','Nuvoloso'],45:['\uD83C\uDF2B\uFE0F','Nebbia'],48:['\uD83C\uDF2B\uFE0F','Nebbia'],51:['\uD83C\uDF26\uFE0F','Pioviggine'],53:['\uD83C\uDF26\uFE0F','Pioviggine'],55:['\uD83C\uDF26\uFE0F','Pioviggine'],61:['\uD83C\uDF27\uFE0F','Pioggia leggera'],63:['\uD83C\uDF27\uFE0F','Pioggia'],65:['\uD83C\uDF27\uFE0F','Pioggia forte'],71:['\uD83C\uDF28\uFE0F','Neve'],73:['\uD83C\uDF28\uFE0F','Neve'],75:['\uD83C\uDF28\uFE0F','Neve'],80:['\uD83C\uDF26\uFE0F','Rovesci'],81:['\uD83C\uDF26\uFE0F','Rovesci'],82:['\u26C8\uFE0F','Rovesci forti'],95:['\u26C8\uFE0F','Temporale'],96:['\u26C8\uFE0F','Temporale'],99:['\u26C8\uFE0F','Temporale']};
-function wxIco(c){ return WXMAP[c] ? WXMAP[c][0] : '\uD83C\uDF21\uFE0F'; }
+var WXMAP={0:['☀️','Sereno'],1:['🌤️','Poco nuvoloso'],2:['⛅','Parzialmente nuvoloso'],3:['☁️','Nuvoloso'],45:['🌫️','Nebbia'],48:['🌫️','Nebbia'],51:['🌦️','Pioviggine'],53:['🌦️','Pioviggine'],55:['🌦️','Pioviggine'],61:['🌧️','Pioggia leggera'],63:['🌧️','Pioggia'],65:['🌧️','Pioggia forte'],71:['🌨️','Neve'],73:['🌨️','Neve'],75:['🌨️','Neve'],80:['🌦️','Rovesci'],81:['🌦️','Rovesci'],82:['⛈️','Rovesci forti'],95:['⛈️','Temporale'],96:['⛈️','Temporale'],99:['⛈️','Temporale']};
+function wxIco(c){ return WXMAP[c] ? WXMAP[c][0] : '🌡️'; }
 function wxTxt(c){ return WXMAP[c] ? WXMAP[c][1] : '--'; }
 
 function fetchWx(){
@@ -502,7 +552,7 @@ function fetchWx(){
     wx=j; renderWxStrip(); renderWxTab();
   }).catch(function(){
     document.getElementById('wxStrip').innerHTML='<span class="wx-loading">Meteo non disponibile, controlla la connessione</span>';
-    document.getElementById('v-meteo').innerHTML='<div class="empty"><div class="e">\uD83D\uDCE1</div><p>Meteo non disponibile. Serve una connessione internet.</p></div>';
+    document.getElementById('v-meteo').innerHTML='<div class="empty"><div class="e">📡</div><p>Meteo non disponibile. Serve una connessione internet.</p></div>';
   });
 }
 
@@ -514,10 +564,10 @@ function dayName(iso){
 function renderWxStrip(){
   if(!wx) return;
   var c=wx.current, d=wx.daily;
-  var h='<div class="wx-now"><span class="ico">'+wxIco(c.weather_code)+'</span><div><div class="wx-temp">'+Math.round(c.temperature_2m)+'\u00B0</div><div class="wx-place">'+PLACE+' - '+wxTxt(c.weather_code)+'</div></div></div>';
+  var h='<div class="wx-now"><span class="ico">'+wxIco(c.weather_code)+'</span><div><div class="wx-temp">'+Math.round(c.temperature_2m)+'°</div><div class="wx-place">'+PLACE+' - '+wxTxt(c.weather_code)+'</div></div></div>';
   h+='<div class="wx-div"></div><div class="wx-days">';
   for(var i=1;i<=4;i++){
-    h+='<div class="wx-day"><div class="d">'+dayName(d.time[i])+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="t">'+Math.round(d.temperature_2m_max[i])+'\u00B0</div></div>';
+    h+='<div class="wx-day"><div class="d">'+dayName(d.time[i])+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="t">'+Math.round(d.temperature_2m_max[i])+'°</div></div>';
   }
   h+='</div>';
   document.getElementById('wxStrip').innerHTML=h;
@@ -527,12 +577,12 @@ function renderWxTab(){
   if(!wx) return;
   var c=wx.current, d=wx.daily, hr=wx.hourly;
   var h='<div class="sec-head"><h2>Meteo a '+PLACE+'</h2></div>';
-  h+='<div class="wx-hero"><span class="big">'+wxIco(c.weather_code)+'</span><div><div class="deg">'+Math.round(c.temperature_2m)+'\u00B0C</div><div class="cond">'+wxTxt(c.weather_code)+'</div><div class="det">Umidita '+Math.round(c.relative_humidity_2m)+'% - Vento '+Math.round(c.wind_speed_10m)+' km/h</div></div></div>';
+  h+='<div class="wx-hero"><span class="big">'+wxIco(c.weather_code)+'</span><div><div class="deg">'+Math.round(c.temperature_2m)+'°C</div><div class="cond">'+wxTxt(c.weather_code)+'</div><div class="det">Umidita '+Math.round(c.relative_humidity_2m)+'% - Vento '+Math.round(c.wind_speed_10m)+' km/h</div></div></div>';
 
   h+='<div class="panel" style="margin-bottom:12px"><div class="panel-head"><h3>Prossimi giorni</h3></div><div style="padding:12px 14px"><div class="wx-grid">';
   for(var i=0;i<7;i++){
     var lbl = i===0 ? 'Oggi' : dayName(d.time[i]);
-    h+='<div class="wx-cell"><div class="d">'+lbl+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="mx">'+Math.round(d.temperature_2m_max[i])+'\u00B0</div><div class="mn">min '+Math.round(d.temperature_2m_min[i])+'\u00B0</div></div>';
+    h+='<div class="wx-cell"><div class="d">'+lbl+'</div><div class="i">'+wxIco(d.weather_code[i])+'</div><div class="mx">'+Math.round(d.temperature_2m_max[i])+'°</div><div class="mn">min '+Math.round(d.temperature_2m_min[i])+'°</div></div>';
   }
   h+='</div></div></div>';
 
@@ -542,7 +592,7 @@ function renderWxTab(){
   }
   h+='<div class="panel"><div class="panel-head"><h3>Prossime ore</h3></div><div style="padding:12px 14px"><div class="wx-hours">';
   for(var m=start;m<start+8 && m<hr.time.length;m++){
-    h+='<div class="wx-hour"><div class="h">'+hr.time[m].slice(11,16)+'</div><div class="i">'+wxIco(hr.weather_code[m])+'</div><div class="t">'+Math.round(hr.temperature_2m[m])+'\u00B0</div></div>';
+    h+='<div class="wx-hour"><div class="h">'+hr.time[m].slice(11,16)+'</div><div class="i">'+wxIco(hr.weather_code[m])+'</div><div class="t">'+Math.round(hr.temperature_2m[m])+'°</div></div>';
   }
   h+='</div></div></div>';
   document.getElementById('v-meteo').innerHTML=h;
@@ -550,10 +600,15 @@ function renderWxTab(){
 
 function renderAll(){ renderItin(); renderBudget(); renderPlaces(); renderContacts(); renderNotes(); }
 
+function findDay(id){
+  for(var i=0;i<data.days.length;i++) if(data.days[i].id===id) return data.days[i];
+  return null;
+}
+
 function renderItin(){
   var h='<div class="sec-head"><h2>Itinerario</h2><button class="btn btn-primary" onclick="addDay()">+ Giorno</button></div>';
   if(!data.days.length){
-    h+='<div class="empty"><div class="e">\uD83D\uDCC5</div><p>Nessun giorno ancora. Aggiungi il primo.</p></div>';
+    h+='<div class="empty"><div class="e">📅</div><p>Nessun giorno ancora. Aggiungi il primo.</p></div>';
   } else {
     for(var i=0;i<data.days.length;i++){
       var day=data.days[i];
@@ -561,35 +616,45 @@ function renderItin(){
       h+='<div class="day-head" onclick="toggleDay('+day.id+')">';
       h+='<div class="day-left"><div class="day-num">'+(i+1)+'</div><div><div class="day-title">'+esc(day.title)+'</div><div class="day-meta">'+day.acts.length+' attivita</div></div></div>';
       h+='<div class="day-right"><button class="btn btn-primary btn-xs" onclick="event.stopPropagation();addAct('+day.id+')">+ Attivita</button>';
-      h+='<button class="icobtn" onclick="event.stopPropagation();renameDay('+day.id+')" title="Rinomina">\u270F\uFE0F</button>';
-      h+='<button class="icobtn" onclick="event.stopPropagation();delDay('+day.id+')" title="Elimina">\uD83D\uDDD1\uFE0F</button>';
-      h+='<span class="chev">\u25BC</span></div></div>';
+      h+='<button class="icobtn" onclick="event.stopPropagation();renameDay('+day.id+')" title="Rinomina">✏️</button>';
+      h+='<button class="icobtn" onclick="event.stopPropagation();delDay('+day.id+')" title="Elimina">🗑️</button>';
+      h+='<span class="chev">▼</span></div></div>';
       h+='<div class="day-body">';
       if(!day.acts.length){
         h+='<div class="empty" style="padding:1.5rem 1rem"><p>Nessuna attivita. Aggiungine una.</p></div>';
       } else {
         for(var j=0;j<day.acts.length;j++){
           var a=day.acts[j];
-          h+='<div class="act"><div class="act-time">'+esc(a.time)+'</div><div class="act-ico">'+esc(a.ico||'\uD83D\uDCCD')+'</div>';
+          h+='<div class="act"><div class="act-time">'+esc(a.time)+'</div><div class="act-ico">'+esc(a.ico||'📍')+'</div>';
           h+='<div class="act-main"><div class="act-name">'+esc(a.name)+'</div>';
           if(a.note) h+='<div class="act-note">'+esc(a.note)+'</div>';
           if(a.cost) h+='<span class="act-cost">'+esc(a.cost)+'</span>';
           h+='</div><div class="act-btns">';
-          if(a.maps) h+='<a href="'+esc(a.maps)+'" target="_blank" rel="noopener" class="maps-pill">\uD83D\uDCCD Maps</a>';
-          h+='<button class="icobtn" onclick="editActivity('+day.id+','+a.id+')" title="Modifica">\u270F\uFE0F</button>';
-          h+='<button class="icobtn" onclick="delAct('+day.id+','+a.id+')" title="Elimina">\uD83D\uDDD1\uFE0F</button>';
+          if(a.maps) h+='<a href="'+esc(a.maps)+'" target="_blank" rel="noopener" class="maps-pill">📍 Maps</a>';
+          h+='<button class="icobtn" onclick="editActivity('+day.id+','+a.id+')" title="Modifica">✏️</button>';
+          h+='<button class="icobtn" onclick="delAct('+day.id+','+a.id+')" title="Elimina">🗑️</button>';
           h+='</div></div>';
         }
+      }
+      if(day.walk){
+        var w=day.walk;
+        h+='<div class="walk-block"><div class="walk-head"><div class="walk-head-l"><span class="ico">🚶</span><div><div class="walk-title">Consiglio della sera</div><div class="walk-sub">Passeggiata nel centro storico</div></div></div>';
+        h+='<button class="icobtn" onclick="editWalk('+day.id+')" title="Modifica">✏️</button></div>';
+        h+='<div class="walk-body"><div class="walk-place">'+esc(w.place)+'</div>';
+        if(w.desc) h+='<div class="walk-desc">'+esc(w.desc)+'</div>';
+        h+='<div class="walk-tags">';
+        if(w.duration) h+='<span class="walk-tag">⏱️ '+esc(w.duration)+'</span>';
+        if(w.stops) h+='<span class="walk-tag">🚶 '+esc(w.stops)+'</span>';
+        h+='</div>';
+        if(w.maps) h+='<a href="'+esc(w.maps)+'" target="_blank" rel="noopener" class="walk-maps">📍 Punto di partenza su Maps</a>';
+        h+='</div></div>';
+      } else {
+        h+='<button class="walk-add" onclick="addWalk('+day.id+')">+ Aggiungi consiglio della sera</button>';
       }
       h+='</div></div>';
     }
   }
   document.getElementById('v-itin').innerHTML=h;
-}
-
-function findDay(id){
-  for(var i=0;i<data.days.length;i++) if(data.days[i].id===id) return data.days[i];
-  return null;
 }
 
 function toggleDay(id){
@@ -613,7 +678,7 @@ function saveDay(){
   var t=document.getElementById('dTitle').value.replace(/^\s+|\s+$/g,'');
   if(!t){ showErr('dTitleErr'); return; }
   if(editDay){ findDay(editDay).title=t; }
-  else { data.days.push({id:Date.now(),title:t,acts:[],open:true}); }
+  else { data.days.push({id:Date.now(),title:t,acts:[],open:true,walk:null}); }
   save(); closeM('mDay'); renderItin();
 }
 function delDay(id){
@@ -649,7 +714,7 @@ function saveAct(){
   var obj={
     id: editAct || Date.now(),
     time:document.getElementById('aTime').value.replace(/^\s+|\s+$/g,''),
-    ico:document.getElementById('aIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCCD',
+    ico:document.getElementById('aIco').value.replace(/^\s+|\s+$/g,'')||'📍',
     name:name,
     note:document.getElementById('aNote').value.replace(/^\s+|\s+$/g,''),
     cost:document.getElementById('aCost').value.replace(/^\s+|\s+$/g,''),
@@ -670,6 +735,38 @@ function delAct(dayId,actId){
   day.acts=out; save(); renderItin();
 }
 
+function addWalk(dayId){
+  activeDay=dayId;
+  document.getElementById('mWalkTitle').textContent='Aggiungi consiglio della sera';
+  var f=['wPlace','wDesc','wDuration','wStops','wMaps'];
+  for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  openM('mWalk');
+}
+function editWalk(dayId){
+  activeDay=dayId;
+  var day=findDay(dayId), w=day.walk||{};
+  document.getElementById('mWalkTitle').textContent='Modifica consiglio della sera';
+  document.getElementById('wPlace').value=w.place||'';
+  document.getElementById('wDesc').value=w.desc||'';
+  document.getElementById('wDuration').value=w.duration||'';
+  document.getElementById('wStops').value=w.stops||'';
+  document.getElementById('wMaps').value=w.maps||'';
+  openM('mWalk');
+}
+function saveWalk(){
+  var place=document.getElementById('wPlace').value.replace(/^\s+|\s+$/g,'');
+  if(!place){ showErr('wPlaceErr'); return; }
+  var obj={
+    place:place,
+    desc:document.getElementById('wDesc').value.replace(/^\s+|\s+$/g,''),
+    duration:document.getElementById('wDuration').value.replace(/^\s+|\s+$/g,''),
+    stops:document.getElementById('wStops').value.replace(/^\s+|\s+$/g,''),
+    maps:document.getElementById('wMaps').value.replace(/^\s+|\s+$/g,'')
+  };
+  findDay(activeDay).walk=obj;
+  save(); closeM('mWalk'); renderItin();
+}
+
 function renderBudget(){
   var ex=data.expenses, tot=0, em=0, da=0;
   for(var i=0;i<ex.length;i++){
@@ -683,12 +780,12 @@ function renderBudget(){
 
   var h='<div class="sec-head"><h2>Budget</h2></div>';
   h+='<div class="metrics">';
-  h+='<div class="metric"><div class="lbl">Totale viaggio</div><div class="val">'+Math.round(tot).toLocaleString('it-IT')+' \u20AC</div></div>';
-  h+='<div class="metric"><div class="lbl">Emiliano ha pagato</div><div class="val g">'+Math.round(em).toLocaleString('it-IT')+' \u20AC</div></div>';
-  h+='<div class="metric"><div class="lbl">Daniela ha pagato</div><div class="val c">'+Math.round(da).toLocaleString('it-IT')+' \u20AC</div></div>';
-  h+='<div class="metric"><div class="lbl">Quota a testa</div><div class="val">'+Math.round(each).toLocaleString('it-IT')+' \u20AC</div></div>';
+  h+='<div class="metric"><div class="lbl">Totale viaggio</div><div class="val">'+Math.round(tot).toLocaleString('it-IT')+' €</div></div>';
+  h+='<div class="metric"><div class="lbl">Emiliano ha pagato</div><div class="val g">'+Math.round(em).toLocaleString('it-IT')+' €</div></div>';
+  h+='<div class="metric"><div class="lbl">Daniela ha pagato</div><div class="val c">'+Math.round(da).toLocaleString('it-IT')+' €</div></div>';
+  h+='<div class="metric"><div class="lbl">Quota a testa</div><div class="val">'+Math.round(each).toLocaleString('it-IT')+' €</div></div>';
   h+='</div>';
-  h+='<div class="settle"><span class="ico">\u2696\uFE0F</span><div><div class="lbl">Conguaglio, divisione 50/50</div><div class="txt">'+settle+'</div></div></div>';
+  h+='<div class="settle"><span class="ico">⚖️</span><div><div class="lbl">Conguaglio, divisione 50/50</div><div class="txt">'+settle+'</div></div></div>';
 
   h+='<div class="panel"><div class="panel-head"><h3>Spese registrate</h3><button class="btn btn-primary btn-xs" onclick="addExp()">+ Spesa</button></div>';
   if(!ex.length){
@@ -696,11 +793,11 @@ function renderBudget(){
   } else {
     for(var k=0;k<ex.length;k++){
       var e=ex[k];
-      h+='<div class="row"><span class="row-ico">'+esc(e.ico||'\uD83D\uDCB6')+'</span>';
+      h+='<div class="row"><span class="row-ico">'+esc(e.ico||'💶')+'</span>';
       h+='<div class="row-main"><div class="row-name">'+esc(e.name)+'</div><div class="row-sub">'+esc(e.date)+' - '+esc(e.who)+'</div></div>';
-      h+='<div class="row-val">'+Math.round(Number(e.amt)).toLocaleString('it-IT')+' \u20AC</div>';
-      h+='<button class="icobtn" onclick="editExpense('+e.id+')">\u270F\uFE0F</button>';
-      h+='<button class="icobtn" onclick="delExp('+e.id+')">\uD83D\uDDD1\uFE0F</button></div>';
+      h+='<div class="row-val">'+Math.round(Number(e.amt)).toLocaleString('it-IT')+' €</div>';
+      h+='<button class="icobtn" onclick="editExpense('+e.id+')">✏️</button>';
+      h+='<button class="icobtn" onclick="delExp('+e.id+')">🗑️</button></div>';
     }
   }
   h+='</div>';
@@ -734,7 +831,7 @@ function saveExp(){
   if(isNaN(amt)||amt<=0){ showErr('eAmtErr'); return; }
   var obj={
     id: editExp||Date.now(),
-    ico:document.getElementById('eIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCB6',
+    ico:document.getElementById('eIco').value.replace(/^\s+|\s+$/g,'')||'💶',
     date:document.getElementById('eDate').value.replace(/^\s+|\s+$/g,''),
     name:name, amt:amt,
     who:document.getElementById('eWho').value
@@ -751,24 +848,43 @@ function delExp(id){
   data.expenses=out; save(); renderBudget();
 }
 
+function placeCard(p){
+  var h='<div class="place"><div class="place-top"><span class="place-ico">'+esc(p.ico||'📍')+'</span>';
+  h+='<div class="place-tt"><div class="place-name">'+esc(p.name)+'</div><div class="place-sub">'+esc(p.sub)+'</div></div>';
+  h+='<button class="icobtn" onclick="editPlaceFn('+p.id+')">✏️</button>';
+  h+='<button class="icobtn" onclick="delPlace('+p.id+')">🗑️</button></div>';
+  if(p.desc) h+='<div class="place-desc">'+esc(p.desc)+'</div>';
+  if(p.tag) h+='<span class="tagpill">'+esc(p.tag)+'</span>';
+  if(p.maps) h+='<a href="'+esc(p.maps)+'" target="_blank" rel="noopener" class="maps-full">📍 Apri in Google Maps</a>';
+  h+='</div>';
+  return h;
+}
+
 function renderPlaces(){
+  var beaches=[], vedere=[];
+  for(var i=0;i<data.places.length;i++){
+    if(data.places[i].cat==='spiaggia') beaches.push(data.places[i]); else vedere.push(data.places[i]);
+  }
   var h='<div class="sec-head"><h2>Da vedere</h2><button class="btn btn-primary" onclick="addPlace()">+ Posto</button></div>';
   if(!data.places.length){
-    h+='<div class="empty"><div class="e">\uD83D\uDC40</div><p>Nessun posto ancora.</p></div>';
+    h+='<div class="empty"><div class="e">👀</div><p>Nessun posto ancora.</p></div>';
   } else {
-    h+='<div class="place-grid">';
-    for(var i=0;i<data.places.length;i++){
-      var p=data.places[i];
-      h+='<div class="place"><div class="place-top"><span class="place-ico">'+esc(p.ico||'\uD83D\uDCCD')+'</span>';
-      h+='<div class="place-tt"><div class="place-name">'+esc(p.name)+'</div><div class="place-sub">'+esc(p.sub)+'</div></div>';
-      h+='<button class="icobtn" onclick="editPlaceFn('+p.id+')">\u270F\uFE0F</button>';
-      h+='<button class="icobtn" onclick="delPlace('+p.id+')">\uD83D\uDDD1\uFE0F</button></div>';
-      if(p.desc) h+='<div class="place-desc">'+esc(p.desc)+'</div>';
-      if(p.tag) h+='<span class="tagpill">'+esc(p.tag)+'</span>';
-      if(p.maps) h+='<a href="'+esc(p.maps)+'" target="_blank" rel="noopener" class="maps-full">\uD83D\uDCCD Apri in Google Maps</a>';
+    h+='<div class="sub-head">🏖️ Le nostre spiagge</div>';
+    if(!beaches.length){
+      h+='<div class="empty" style="padding:1.5rem 1rem"><p>Nessuna spiaggia ancora.</p></div>';
+    } else {
+      h+='<div class="place-grid">';
+      for(var j=0;j<beaches.length;j++) h+=placeCard(beaches[j]);
       h+='</div>';
     }
-    h+='</div>';
+    h+='<div class="sub-head">👀 Punti di interesse</div>';
+    if(!vedere.length){
+      h+='<div class="empty" style="padding:1.5rem 1rem"><p>Nessun punto di interesse ancora.</p></div>';
+    } else {
+      h+='<div class="place-grid">';
+      for(var k=0;k<vedere.length;k++) h+=placeCard(vedere[k]);
+      h+='</div>';
+    }
   }
   document.getElementById('v-vedere').innerHTML=h;
 }
@@ -778,6 +894,7 @@ function addPlace(){
   document.getElementById('mPlaceTitle').textContent='Aggiungi posto';
   var f=['pIco','pTag','pName','pSub','pDesc','pMaps'];
   for(var i=0;i<f.length;i++) document.getElementById(f[i]).value='';
+  document.getElementById('pCat').value='spiaggia';
   openM('mPlace');
 }
 function editPlaceFn(id){
@@ -791,6 +908,7 @@ function editPlaceFn(id){
   document.getElementById('pSub').value=p.sub||'';
   document.getElementById('pDesc').value=p.desc||'';
   document.getElementById('pMaps').value=p.maps||'';
+  document.getElementById('pCat').value=p.cat||'spiaggia';
   openM('mPlace');
 }
 function savePlace(){
@@ -798,12 +916,13 @@ function savePlace(){
   if(!name){ showErr('pNameErr'); return; }
   var obj={
     id: editPlaceId||Date.now(),
-    ico:document.getElementById('pIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCCD',
+    ico:document.getElementById('pIco').value.replace(/^\s+|\s+$/g,'')||'📍',
     tag:document.getElementById('pTag').value.replace(/^\s+|\s+$/g,''),
     name:name,
     sub:document.getElementById('pSub').value.replace(/^\s+|\s+$/g,''),
     desc:document.getElementById('pDesc').value.replace(/^\s+|\s+$/g,''),
-    maps:document.getElementById('pMaps').value.replace(/^\s+|\s+$/g,'')
+    maps:document.getElementById('pMaps').value.replace(/^\s+|\s+$/g,''),
+    cat:document.getElementById('pCat').value
   };
   if(editPlaceId){
     for(var i=0;i<data.places.length;i++) if(data.places[i].id===editPlaceId) data.places[i]=obj;
@@ -818,11 +937,11 @@ function delPlace(id){
 }
 
 function conRow(c){
-  var h='<div class="contact-row"><span class="row-ico">'+esc(c.ico||'\uD83D\uDCDE')+'</span>';
+  var h='<div class="contact-row"><span class="row-ico">'+esc(c.ico||'📞')+'</span>';
   h+='<div class="row-main"><div class="row-name">'+esc(c.name)+'</div><div class="row-sub">'+esc(c.sub)+'</div></div>';
-  h+='<a href="tel:'+esc(String(c.tel).replace(/\s/g,''))+'" class="tel-btn'+(c.type==='sos'?' sos':'')+'">\uD83D\uDCDE '+esc(c.tel)+'</a>';
-  h+='<button class="icobtn" onclick="editContact('+c.id+')">\u270F\uFE0F</button>';
-  h+='<button class="icobtn" onclick="delCon('+c.id+')">\uD83D\uDDD1\uFE0F</button></div>';
+  h+='<a href="tel:'+esc(String(c.tel).replace(/\s/g,''))+'" class="tel-btn'+(c.type==='sos'?' sos':'')+'">📞 '+esc(c.tel)+'</a>';
+  h+='<button class="icobtn" onclick="editContact('+c.id+')">✏️</button>';
+  h+='<button class="icobtn" onclick="delCon('+c.id+')">🗑️</button></div>';
   return h;
 }
 function renderContacts(){
@@ -842,7 +961,7 @@ function renderContacts(){
     h+='</div>';
   }
   if(!data.contacts.length){
-    h+='<div class="empty"><div class="e">\uD83D\uDCDE</div><p>Nessun contatto ancora.</p></div>';
+    h+='<div class="empty"><div class="e">📞</div><p>Nessun contatto ancora.</p></div>';
   }
   document.getElementById('v-contatti').innerHTML=h;
 }
@@ -873,7 +992,7 @@ function saveCon(){
   if(!tel){ showErr('cTelErr'); return; }
   var obj={
     id: editCon||Date.now(),
-    ico:document.getElementById('cIco').value.replace(/^\s+|\s+$/g,'')||'\uD83D\uDCDE',
+    ico:document.getElementById('cIco').value.replace(/^\s+|\s+$/g,'')||'📞',
     name:name,
     sub:document.getElementById('cSub').value.replace(/^\s+|\s+$/g,''),
     tel:tel,
