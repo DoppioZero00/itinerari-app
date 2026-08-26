@@ -248,6 +248,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="topbar">
     <div class="brand"><span>&#9992;&#65039;</span><strong>Travel Board</strong></div>
     <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="updateItinerary()">Aggiorna</button>
       <button class="btn btn-ghost" onclick="exportData()">Backup</button>
       <button class="btn btn-ghost" onclick="doLogout()">Esci</button>
     </div>
@@ -419,29 +420,29 @@ var LAT=41.9487, LON=16.0131, PLACE='Peschici';
 
 var seed={
   days:[
-    {id:1,title:'Giovedi 28 Agosto - Arrivo',open:true,acts:[
+    {id:1,title:'Venerdi 28 Agosto - Arrivo',open:true,acts:[
       {id:101,time:'Mattina',ico:'🚗',name:'Partenza da Roma',note:'Circa 5h di viaggio. A1 poi A16 poi SS693. Controlla il NOCO booster nel bagagliaio.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Roma/Peschici'},
       {id:102,time:'Pomeriggio',ico:'🏊',name:'Piscina del Residence',note:'Relax in piscina in attesa del check-in, senza fretta.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
       {id:103,time:'17:00',ico:'🏡',name:'Check-in Residence Jolly',note:'Localita Paglianza, Peschici. Parcheggio incluso. Chiedi la password del wifi.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
       {id:104,time:'20:00',ico:'⭐',name:'Cena Da Nonna Italia',note:'Vista tramonto, pasta fatta in casa, vongole con bottarga. Low budget: panetteria/gastronomia del centro per panino e birra, circa 12 euro.',cost:'70 euro',maps:'https://maps.google.com/?cid=3544764396454536334'}
     ],walk:{place:'Peschici',desc:'Porta del Ponte e Torre di avvistamento -> Corso Garibaldi -> vicoli del centro storico -> Castello (vista panoramica) -> bastioni con le torri saracene',duration:'30-40 min',stops:'5 tappe',maps:'https://www.google.com/maps/search/Porta+del+Ponte+Peschici'}},
 
-    {id:2,title:'Venerdi 29 Agosto - Cala del Turco e Rodi Garganico',open:false,acts:[
+    {id:2,title:'Sabato 29 Agosto - Cala del Turco e Rodi Garganico',open:false,acts:[
       {id:201,time:'09:00',ico:'🏖️',name:'Cala del Turco',note:'Vera spiaggia libera, niente stabilimenti. Segui le indicazioni per "Residence Cala Lunga" (non il Lido): parcheggio gratuito lungo la stradina, poi sentiero a destra circa 5 min a piedi. Portati ombrellone, sdraio e pranzo al sacco.',cost:'',maps:'https://www.google.com/maps/search/?api=1&query=Spiaggia+di+Cala+del+Turco&query_place_id=ChIJs1jMa0uxNxMRA8XA7SL9Axk'},
       {id:202,time:'20:00',ico:'🍝',name:'Cena Trattoria Pane e Pomodoro',note:'Rodi Garganico. Orecchiette pistacchio e gamberi, porzioni generose, vista mare. Low budget: pizza al taglio o panino al porto, circa 8-10 euro.',cost:'60 euro',maps:'https://maps.google.com/?cid=14813282956050820855'}
     ],walk:{place:'Rodi Garganico',desc:'Piazza Padre Pio (parcheggio) -> Chiesa di San Pietro -> mura e torri del Castello -> vicoli del quartiere Chepabbash -> Piazza degli Innamorati -> Santuario Madonna della Libera',duration:'25-35 min',stops:'6 tappe',maps:'https://www.google.com/maps/search/Piazza+Padre+Pio+Rodi+Garganico'}},
 
-    {id:3,title:'Sabato 30 Agosto - Scialmarino e Vieste',open:false,acts:[
+    {id:3,title:'Domenica 30 Agosto - Scialmarino e Vieste',open:false,acts:[
       {id:301,time:'09:30',ico:'🏝️',name:'Spiaggia di Scialmarino',note:'Vera spiaggia libera sabbiosa. Parcheggia vicino al Camping Porticello Villaggi Vieste (indicazioni per il Trabucco Ponticello), poi 300 metri a piedi fino al tratto libero. Portati tutto.',cost:'',maps:'https://www.google.com/maps/search/?api=1&query=Spiaggia+di+Scialmarino&query_place_id=ChIJEwyWQlK2NxMRRozSkcVYM_g'},
       {id:302,time:'20:00',ico:'❤️',name:'Cena Trattoria Il Paniere',note:'Vieste, balcone vista mare. Low budget: PANINO CON POLPO da chioschetto del porto, la specialita del Gargano, circa 8-12 euro.',cost:'55 euro',maps:'https://www.google.com/maps/search/Trattoria+Il+Paniere+Vieste'}
     ],walk:{place:'Vieste',desc:'Arco di Via Duomo -> Cattedrale di Santa Maria Assunta -> Chianca Amara -> Chiesa di San Francesco e Piazzetta Petrone -> Castello Svevo Aragonese (vista Pizzomunno) -> Lungomare Mattei',duration:'40-50 min',stops:'6 tappe',maps:'https://www.google.com/maps/search/Cattedrale+di+Vieste'}},
 
-    {id:4,title:'Domenica 31 Agosto - Sfinale e Testa del Gargano',open:false,acts:[
+    {id:4,title:'Lunedi 31 Agosto - Sfinale e Testa del Gargano',open:false,acts:[
       {id:401,time:'09:30',ico:'🌲',name:'Spiaggia di Sfinale (mista)',note:'Attenzione: e mista, meta lido meta libera, non del tutto senza stabilimenti. Parcheggio vicino alla Torre di Sfinale (spesso pieno, arriva presto): scendi verso il mare e trovi tratti liberi ai due estremi della baia.',cost:'',maps:'https://www.google.com/maps/search/?api=1&query=Torre+di+Sfinale+Peschici'},
       {id:402,time:'20:00',ico:'🐚',name:'Cena in trattoria locale',note:'Testa del Gargano, piccolo paesino, pesce fresco locale. Low budget: paninoteca o bar del paese, circa 10 euro.',cost:'50 euro',maps:'https://www.google.com/maps/search/Testa+del+Gargano'}
     ],walk:{place:'Testa del Gargano',desc:'Breve giro tra le viuzze del paesino, il porticciolo peschereccio e il belvedere sulla costa',duration:'20-30 min',stops:'3 tappe',maps:'https://www.google.com/maps/search/Testa+del+Gargano'}},
 
-    {id:5,title:'Lunedi 1 Settembre - Isole Tremiti (Compleanno)',open:false,acts:[
+    {id:5,title:'Martedi 1 Settembre - Isole Tremiti (Compleanno)',open:false,acts:[
       {id:501,time:'06:45',ico:'⏰',name:'Sveglia e colazione veloce',note:'Zaino pronto dalla sera prima. Controlla il biglietto sul telefono.',cost:'',maps:''},
       {id:502,time:'07:15',ico:'🚗',name:'Auto verso il Porto di Peschici',note:'10 minuti dal residence. Parcheggio nei pressi del porto, a pagamento.',cost:'10 euro parking',maps:'https://maps.google.com/?cid=6843945624796536268'},
       {id:503,time:'07:30',ico:'🚢',name:'Traghetto Navitremiti',note:'Biglietti su navitremiti.com, prenotare online in anticipo. Traversata circa 1 ora.',cost:'90 euro in due',maps:'https://maps.google.com/?cid=6843945624796536268'},
@@ -451,13 +452,13 @@ var seed={
       {id:507,time:'20:30',ico:'🎂',name:'Cena di compleanno - I Tre Archi',note:'Peschici, vista mare, semifreddo Ferrero Rocher. Se pieno: Trattoria Al Faro. Volendo fare una gita: Osteria Al Vicolo dell Amore o Trattoria Il Paniere a Vieste (45 min). Low budget: panino con polpo o pizza al taglio centro Peschici, circa 12-15 euro.',cost:'75 euro'  ,maps:'https://www.google.com/maps/search/I+Tre+Archi+Peschici'}
     ],walk:{place:'Peschici (Marina)',desc:'Passeggiata al porto, marina illuminata, bar e gelaterie sul lungomare basso',duration:'20-30 min',stops:'3 tappe',maps:'https://www.google.com/maps/search/Marina+di+Peschici'}},
 
-    {id:6,title:'Martedi 2 Settembre - Spiaggia e Monte Sant Angelo',open:false,acts:[
+    {id:6,title:'Mercoledi 2 Settembre - Spiaggia e Monte Sant Angelo',open:false,acts:[
       {id:601,time:'09:30',ico:'🏖️',name:'Zaiana Beach (mista)',note:'Non ancora vista: ampia, acque bellissime, trabucco storico vicino. Attenzione: e mista, meta lido meta libera. In alternativa torna nella tua preferita tra Cala del Turco, Scialmarino o Sfinale.',cost:'',maps:'https://maps.google.com/?cid=2629661639351755331'},
       {id:602,time:'19:00',ico:'🚗',name:'Partenza per Monte Sant Angelo',note:'Circa 1h di auto verso l entroterra del Gargano.',cost:'',maps:'https://www.google.com/maps/search/Monte+Sant+Angelo'},
       {id:603,time:'20:30',ico:'🍽️',name:'Cena Casa Li Jalantuumene',note:'Nel Rione Junno, cicorielle di campo, paste fatte in casa, carni podoliche. Low budget: puccia o focaccia con polpo fritto, circa 10 euro.',cost:'55 euro',maps:'https://www.google.com/maps/search/Casa+Li+Jalantuumene+Monte+Sant+Angelo'}
     ],walk:{place:'Monte Sant Angelo',desc:'Santuario di San Michele Arcangelo -> Via Reale Basilica -> Rione Junno -> Castello Normanno-Svevo -> Tomba di Rotari',duration:'40-50 min',stops:'5 tappe',maps:'https://maps.google.com/?cid=2695649454165254931'}},
 
-    {id:7,title:'Mercoledi 3 Settembre - Rientro',open:false,acts:[
+    {id:7,title:'Giovedi 3 Settembre - Rientro',open:false,acts:[
       {id:701,time:'09:00',ico:'🌊',name:'Ultima nuotata',note:'La tua spiaggia preferita della settimana. Goditela senza fretta.',cost:'',maps:'https://maps.google.com/?cid=13341197267827629312'},
       {id:702,time:'11:30',ico:'🧳',name:'Check-out dal Residence Jolly',note:'Bagagli in auto, ultimo caffe nel centro storico di Peschici.',cost:'',maps:'https://www.google.com/maps/search/Residence+Jolly+Paglianza+Peschici'},
       {id:703,time:'13:00',ico:'🚗',name:'Partenza verso Roma',note:'Circa 5 ore. Pausa consigliata dopo 2 ore di guida. Buon rientro.',cost:'85 euro benzina',maps:'https://www.google.com/maps/dir/Peschici/Roma'}
@@ -1037,6 +1038,16 @@ function renderNotes(){
       }
     },600);
   });
+}
+
+function updateItinerary(){
+  if(!confirm('Questo aggiorna giornate, attivita, spiagge/punti di interesse e contatti all\'ultima versione preparata da Claude.\n\nLe tue SPESE e le tue NOTE non vengono toccate.\n\nATTENZIONE: eventuali modifiche o aggiunte che hai fatto tu a giorni, attivita, posti o contatti andranno perse e sostituite da quelle nuove. Continuare?')) return;
+  data.days = JSON.parse(JSON.stringify(seed.days));
+  data.places = JSON.parse(JSON.stringify(seed.places));
+  data.contacts = JSON.parse(JSON.stringify(seed.contacts));
+  save();
+  renderAll();
+  alert('Itinerario aggiornato. Le tue spese e note sono rimaste come prima.');
 }
 
 function exportData(){
